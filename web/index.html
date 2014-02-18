@@ -33,15 +33,15 @@
 <body background="images/background.png">
 
         <div id="myCanvasContainer">
- <canvas width="300" height="300" id="myCanvas">
+ <canvas width="500" height="500" id="myCanvas">
   <p>Anything in here will be replaced on browsers that support the canvas element</p>
     <ul>
-   <li><a href="http://www.google.com" target="_blank">Google</a></li>
-   <li><a href="/fish">Fish</a></li>
-   <li><a href="/chips">Chips</a></li>
-   <li><a href="/salt">Salt</a></li>
+   <li><a href="http://www.google.com" target="_blank">Family</a></li>
+   <li><a href="/fish">Happy moments</a></li>
+   <li><a href="/chips">Colleagues</a></li>
+   <li><a href="/salt">Sad moments</a></li>
   </ul>
-   <li><a href="/vinegar">Vinegar</a></li>
+   <li><a href="/vinegar">Friends</a></li>
 
  </canvas>
 </div>
@@ -67,12 +67,12 @@
           <form id="locationBar" action="javascript:codeAddress()">
             
             <div id="error"><span>Can't find your location, try again</span></div>
-            <input id="location" placeholder="Where do you want to be?" type="text">  <input class="weights" id="locationWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)">
+            <div id="locationInput" class="Input"><input id="location" placeholder="Where do you want to be?" type="text"> <input class="weights" id="locationWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)"></div>
             <div class="message" style="display: block;"><span>Do you want to go back in time?</span></div>
-            <input type="date" id="datepicker" name='from' size='9' value="" />   <input class="weights" id="timeWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)">
+            <div id="dateInput" class="Input"><input type="date" id="datepicker" name='from' size='9' value="" />   <input class="weights" id="timeWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)"></div>
 
             <div class="message" style="display: block;"><span>Or do you want to change your mood?</span></div>
-            <input id="emotion" placeholder="How are you feeling?" type="text">  <input class="weights" id="moodWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)">
+            <div id="emotionInput" class="Input"><input id="emotion" placeholder="How are you feeling?" type="text">  <input class="weights" id="moodWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)"></div>
             <input type="submit" class="submit" value="FIND A MEMORY">
           </form>
         </div>
