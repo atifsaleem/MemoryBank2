@@ -1,5 +1,6 @@
 var resultref;
 var marker;
+var thismemory;
 var markersArray = [];
 var shitCounter = 0;
 var iteration = 0;
@@ -12,12 +13,16 @@ var barResultsStore;
 var userLoc;
 var currentlatlng;
 var path;
+var musicpath;
+var index;
 var dates = new Array("Monday - 25 January 2010", "Wednesday - 10 February 2010", "Thursday - 10 June 2010", "Thursday - 9 September 2010", "Tuesday - 5 October 2010", "Tuesday - 2 November 2010", "Tuesday - 5 April 2011", "Friday - 8 April 2011", "Tuesday - 26 July 2011", "Tuesday - 6 September 2011", "Tuesday - 13 September 2011", "Monday - 10 October 2011", "Friday - 8 June 2012", "Friday - 14 December 2012", "Thursday - 27 December 2012", "Monday - 7 January 2013", "Monday - 8 April 2013", "Monday, 1 July 2013", "Tuesday - 6 August 2013", "Friday - 11 October 2013");
 var people = new Array("Pierre","Enric","Federico","Emilie","Alizee","Riddhima","Tetsuaki","Simon","Karthik","Rishabh","Marshall","Yang Guang","Di Xiang");
-var locations = new Array("Miami Beach, FL, United States","Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States","Fort Canning Park Singapore","Arab Street Singapore","Dubai - United Arab Emirates");
-var memories = new Array("images/photos/Memory1/","images/photos/Memory2/","images/photos/Memory3/","images/photos/Memory4/","images/photos/Memory5/")
-$wait = $('#wait');
-$locationBar = $('#locationBar')
+var locations = new Array("Miami Beach, FL, United States","Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States","Fort Canning Park Singapore","Arab Street Singapore","Dubai - United Arab Emirates","Phnom Penh, Cambodia","Fujairah - United Arab Emirates");
+var videos = new Array("http://www.youtube.com/embed/watch?v=-zmx0kScUss","http://www.youtube.com/embed/watch?v=Ik-sFkQqKD8;autoplay=1","http://www.youtube.com/embed/watch?v=zw2a64fp3No&iframe;autoplay=1","http://youtube.com/embed/watch?v=0xDNuWX5nUA?t=5s;autoplay=1","http://www.youtube.com/embed/watch?v=wOSci-rWf2Q;autoplay=1");
+var memories = new Array("images/photos/Memory1/","images/photos/Memory2/","images/photos/Memory3/","images/photos/Memory4/","images/photos/Memory5/","images/photos/Memory6/resized/","images/photos/Memory7/");
+var music = new Array("music/island.m4a","music/peach.m4a","music/swing.m4a","music/bbq.m4a","music/lazyday.m4a","music/minuet.mp3","music/acoustic.m4a");
+$wait = jQuery('#wait');
+$locationBar = jQuery('#locationBar')
 //map stuff
 //
 //declare b&w google maps
@@ -44,8 +49,14 @@ var rndpeople=people[Math.floor(Math.random()*people.length)];
 
 document.getElementById('wtf').innerHTML="On "+rnddate;
 document.getElementById('wrong').innerHTML = "You were with "+rndpeople;
+var rnddate=dates[Math.floor(Math.random()*dates.length)];
+var rndpeople=people[Math.floor(Math.random()*people.length)];
+
+document.getElementById('wtf').innerHTML="On "+rnddate;
+document.getElementById('wrong').innerHTML = "You were with "+rndpeople;
 jQuery("#shit").click(function() {
-		$.fancybox([
+		/*
+		jQuery.fancybox([
 			path+'1.jpg',
 			path+'2.jpg',
 			path+'3.jpg'
@@ -55,8 +66,37 @@ jQuery("#shit").click(function() {
 			'transitionOut'		: 'none',
 			'type'              : 'image',
 			'changeFade'        : 0
+		});*/
+//jQuery.modal(,{); 
+var audio = new Audio(musicpath);
+audio.play();
+var pics;
+if (index==6)
+pics = "<div id=\"slider\"><img src=\""+path+"1.jpg\" alt=\"\" /><img src=\""+path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+path+"3.jpg\" alt=\"\" /></a><img src=\""+path+"4.jpg\" alt=\"\"/><img src=\""+path+"5.jpg\" alt=\"\"/><img src=\""+path+"6.jpg\" alt=\"\"/><img src=\""+path+"7.jpg\" alt=\"\"/><img src=\""+path+"8.jpg\" alt=\"\"/></div>";
+else if (index==5)
+pics = "<div id=\"slider\"><img src=\""+path+"1.jpg\" alt=\"\" /><img src=\""+path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+path+"3.jpg\" alt=\"\" /></a><img src=\""+path+"4.jpg\" alt=\"\"/><img src=\""+path+"5.jpg\" alt=\"\"/><img src=\""+path+"6.jpg\" alt=\"\"/><img src=\""+path+"7.jpg\" alt=\"\"/><img src=\""+path+"8.jpg\" alt=\"\"/><img src=\""+path+"9.jpg\" alt=\"\" /><img src=\""+path+"10.jpg\" alt=\"\" /></div>";
+else
+pics = "<div id=\"slider\"><img src=\""+path+"1.jpg\" alt=\"\" /><img src=\""+path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+path+"3.jpg\" alt=\"\" /></a><img src=\""+path+"1.jpg\" alt=\"\"/></div>" 
+jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
+	dialog.overlay.fadeIn('slow', function () {
+		dialog.data.hide();
+		dialog.container.fadeIn('slow', function () {
+			dialog.data.slideDown('slow');	 
 		});
 	});
+},onClose: function (dialog) {
+	audio.pause();
+	dialog.data.fadeOut('slow', function () {
+		dialog.container.hide('slow', function () {
+			dialog.overlay.slideUp('slow', function () {
+				$.modal.close();
+			});
+		});
+	});
+}});
+
+window.myFlux = new flux.slider('#slider');
+});
 }
 //create map
 map = new google.maps.Map(document.getElementById("map"), myOptions);
@@ -66,7 +106,7 @@ var service = new google.maps.places.PlacesService(map);
 
 
 //kick shit off 
-$(document).ready(function(){
+jQuery(document).ready(function(){
 	//detect string ?wherethefuck to trigger manual location entry
 	var str = window.location.href;
 	var substr = str.split('?');
@@ -95,7 +135,7 @@ function getLocation() {
 //if geolocation error trigger manual entry
 function handle_error(err) {
 	$locationBar.css("opacity",1);
-	showError("Welcome to Memory Bank");
+	showError("Hi Atif, what do you want to see today?");
 	console.log ("can't find location")
 	if (err.code == 0) {
 		console.log("unknown")
@@ -114,7 +154,7 @@ function handle_error(err) {
 //get current location
 function currentLocation(position){
 	$wait.fadeIn(function(){
-		$("#locationBar").fadeOut();
+		jQuery("#locationBar").fadeOut();
 		var latitude = position.coords.latitude;
 		var longitude = position.coords.longitude;
 		currentlatlng = new google.maps.LatLng(latitude, longitude);
@@ -128,7 +168,7 @@ function currentLocation(position){
 					console.log(formattedAddress);
 					if (formattedAddress.indexOf("USA") !=-1) {
 						console.log("in the USA");
-						$("#omnom").show();
+						jQuery("#omnom").show();
 					}
           		}
       		}
@@ -201,10 +241,12 @@ function chooseBar(results) {
 
 //show bar details
 function showBar(place, status) {
+	 //var x=document.getElementById("viewport");
+	 //x.style.display='none';
 	if (status == google.maps.places.PlacesServiceStatus.OK) {
 		//clear markers and set marker for chosen bar
 		for (i in markersArray) {
-      		markersArray[i].setMap(null);
+      		//markersArray[i].setMap(null);
     		}
 		drinkMarker = new google.maps.Marker({
 			map: map,
@@ -239,9 +281,9 @@ function showBar(place, status) {
 		}
 		//add name and address details
 		placeAddress = place.formatted_address;
-		$("#destination").html("YOU WERE AT <br/><a href='" + placeSite + "' target='_blank' title='VISIT THE FUCKING WEBSITE'>" + placeName + "</a>")
-		$("#address").html(placeAddress);
-		$("#actions, #about, #recommendation, .ad")
+		jQuery("#destination").html("YOU WERE AT <br/><a href='" + placeSite + "' target='_blank' title='VISIT THE FUCKING WEBSITE'>" + placeName + "</a>")
+		jQuery("#address").html(placeAddress);
+		jQuery("#actions, #about, #recommendation, .ad")
 			.fadeIn(function(){
 				$wait.fadeOut();});
 		updateDate();
@@ -269,18 +311,24 @@ function calcRoute(start, end) {
  
 //manual geolocation
 function codeAddress() {
+	document.getElementById("map").style.visibility="visible";
+    document.getElementById("address").style.visibility="visible";
+    document.body.style.background = "";
+    document.body.style.backgroundColor = "#FFF";
 	$wait.fadeIn(function(){
 	$locationBar.fadeOut();
 	var address = document.getElementById("location").value;
-	var index = locations.indexOf(address);
+	index = locations.indexOf(address);
 	path = memories[index];
+	musicpath = music[index];
+	thismemory=address;
 	geocoder.geocode( { 'address': address}, function(results, status) {
 		console.log("manual location");										  		
 		if (status == google.maps.GeocoderStatus.OK) {
 			//console.log(results[0].geometry.location);
 			if (results[0].formatted_address.indexOf("USA") !=-1) {
 				console.log("in the USA");
-				$("#omnom").show();
+				jQuery("#omnom").show();
 			}
 			currentlatlng = results[0].geometry.location;
 			getPlaces(currentlatlng); 
@@ -295,7 +343,7 @@ function codeAddress() {
 
 //choose another bar
 /*
-$("#shit").click(function(){
+jQuery("#shit").click(function(){
 	//if there's still more bars in the array, choose the next one					  
 	if (shitCounter < (resultsStore.length - 1)) {
 		shitCounter++;
@@ -322,7 +370,8 @@ function hideURLbar(){
 function showError(msg){
 	$wait.fadeOut();
 	$locationBar.fadeIn();
-	$('#error').text(msg).fadeIn();
+	jQuery("#error span").css("background","white").css("opacity","0.8");
+	jQuery('#error').html("<span>"+msg+"</span>").fadeIn();
 }
 
 
