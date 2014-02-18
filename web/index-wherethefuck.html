@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>MEMORY BANK</title>
+<meta property="og:title" content="WHERE THE FUCK SHOULD I GO TO EAT?"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="http://wherethefuckshouldigotoeat.com"/>
+<meta property="og:image" content="http://wherethefuckshouldigotoeat.com/apple-touch-icon-114x114-precomposed.png"/>
+<meta name="og:site_name" content="WTFSIGTE"/>
+<meta name="og:description" content="WHERE THE FUCK SHOULD I GO TO EAT"/>
+<meta name="description" content="WHERE THE FUCK SHOULD I GO TO EAT?"/>
+<meta name="keywords" content="where the fuck should i go to eat? food, recommendations, restaurants, dining, takeaway, eat, hungry, maps, directions, google, api, html5, css3, jquery, responsive, cool, coolography, "/>
+<meta name="author" content="coolography"/>
+<meta name="apple-itunes-app" content="app-id=537697636"/>
+<!-- Set the viewport width to device width for mobile -->
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<!-- Included CSS Files -->
+<link rel="stylesheet" href="stylesheets/foundation.css"/>
+<link rel="stylesheet" href="stylesheets/app-v=3.css"/>
+<!-- IE Fix for HTML5 Tags -->
+<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script src="js/modernizr-2.0.min.js"></script>
+<!-- ANALYTICS -->
+<script type="text/javascript">
+
+ 
+
+</script>
+</head>
+<body>
+<!-- container -->
+<div class="container">
+<!--
+	<div class="ad leader">
+    
+<iframe src="http://rcm.amazon.com/e/cm?t=w0c90-20&o=1&p=48&l=ur1&category=computers_accesories&banner=1JGF7EPKY5QJ10M4MM02&f=ifr" width="728" height="90" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+
+
+    </div>
+    <div class="ad mobile">
+<iframe src="http://rcm.amazon.com/e/cm?t=w0c90-20&o=1&p=42&l=ur1&category=computers_accesories&banner=1GY733EW78BZVATVZAR2&f=ifr" width="234" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+
+</div>-->
+
+	<a  id="wait">WAIT THE FUCK UP <span></span></a>
+      <!-- GEOLOCATION-->
+      <div id="locate" class="row">
+        <div class="twelve columns">
+          <form id="locationBar" action="javascript:codeAddress()">
+            <div id="error">Can't find your location, try again</div>
+            <input id="location" placeholder="WHERE THE FUCK ARE YOU?" type="text">
+            <input type="submit" class="submit" value="find me a place to fucking eat">
+          </form>
+        </div>
+      </div>
+      <!--RECOMMENDATION-->
+      <div id="recommendation" class="row">
+        <div class="twelve columns"> <span id="destination"></span>
+          <div id="mapcontainer">
+            <div id="address"></div>
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+      <!--ACTIONS-->
+      <div id="actions" class="row">
+        <div class="four columns"> <a href="index-wherethefuck.html" id="wrong" title="BLAME YOUR FUCKING DEVICE">my location is fucking wrong</a> </div>
+        <div class="four columns"> <a href="index-wherethefuck.html#" id="shit" title="FUCK YOU">No, That place looks like shit</a> </div>
+        <div class="four columns"> <a href="http://www.wherethefuckshouldigofordrinks.com" id="wtf" title="WHERE THE FUCK SHOULD I GO FOR DRINKS?">ACTUALLY, I'M FUCKING THIRSTY</a> </div>
+      </div>
+<!--  <div class="row" id="omnom" style="display:none"><a href="http://www.omnom.com/?utm_source=WTFSIGTE&utm_medium=cpc&utm_campaign=%2F" title="YOU LAZY SHIT" onClick="_gaq.push(['_trackEvent', 'outbound', 'click', 'omnom', 0.75]);">I WANT MY FOOD FUCKING DELIVERED</a></div>-->
+  <!--ABOUT-->
+  <div id="about" class="row">
+      <div class="links">
+      <div class="inspire two columns"> <a href="http://itunes.apple.com/app/where-f***-should-i-go-to/id537697636" title="GET THE FUCKING APP"> <img src="images/badge.png" alt="APP COMING SOON"></a> </div>
+      <div class="at two columns"> <a href="http://www.twitter.com/wtfsigte" title="#FUCKOFF">@wtfsigte</a> </div>
+      <div class="created two columns"> <a href="http://www.coolography.co.uk" title="FUCKING COOL">created by </a></div>
+    </div>
+  <div class="social">
+      <div class="fb two columns">
+		<iframe src="http://www.facebook.com/plugins/like.php?href=http://wherethefuckshouldigotoeat.com&send=false&layout=button_count&width=100&show_faces=false&action=like&colorscheme=light&font=arial&height=21&appId=177247419022975" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>
+      </div>
+      <div class="tw two columns"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a>
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      </div>
+      <div class="gplus two columns">
+        <div class="g-plusone" data-width="120" data-href="http://www.wherethefuckshouldigotoeat.com/"></div>
+      </div>
+    </div>
+    <div id="fyyfs">
+     <p><a href="http://www.fuckyouyoufuckingshit.com/" title="FUCK YOU THEN">Offended?</a></p>
+     </div>
+  </div>
+  <!--
+    <div class="ad leader bottom">
+<iframe src="http://rcm.amazon.com/e/cm?t=w0c90-20&o=1&p=48&l=ur1&category=kindle&banner=18PZ4JRRVZ7619YHFE02&f=ifr" width="728" height="90" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+
+
+    </div>
+    
+    <div class="ad mobile bottom">
+	<iframe src="http://rcm.amazon.com/e/cm?t=w0c90-20&o=1&p=42&l=ur1&category=kindle&banner=1WZT8SBSTKQCBZE3V182&f=ifr" width="234" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+
+    </div>
+    -->
+   
+
+</div>
+<!-- MAPS -->
+<script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places,adsense&sensor=true&key=AIzaSyCTxiWhuS0yb-zBc11xjfNlFubjdYkZtp8" type="text/javascript"></script>
+<!-- G+ -->
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+<!-- Included JS Files -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
