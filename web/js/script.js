@@ -108,6 +108,10 @@ var service = new google.maps.places.PlacesService(map);
 //kick shit off 
 jQuery(document).ready(function(){
 	//detect string ?wherethefuck to trigger manual location entry
+	jQuery( "#showMoreButton" ).click(function() {
+  alert( "Handler for .click() called." );
+});
+
 	var str = window.location.href;
 	var substr = str.split('?');
 	if(substr[1] == "wherethefuck"){			
@@ -371,7 +375,7 @@ function showError(msg){
 	$wait.fadeOut();
 	$locationBar.fadeIn();
 	jQuery("#error span").css("background","white").css("opacity","0.8");
-	jQuery('#error').html("<span>"+msg+"</span>").fadeIn();
+	jQuery('#error').html("<span>"+msg+"</span><a id=\"showMoreButton\"><img src=\"images/showmore.png\" id=\"showMore\"></a>").fadeIn();
 }
 
 

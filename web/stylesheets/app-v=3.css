@@ -583,4 +583,16 @@ margin-left: -470px;
 float: left;
 margin-top: 3%;
 width: 15%;
+display: none;
+}
+
+#showMore{
+width:32px;
+height:32px;
+float: right;
+opacity: 0.5;
+}
+#showMore:hover{
+opacity: 1.0;
+cursor: pointer;
 }
