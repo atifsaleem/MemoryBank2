@@ -41,7 +41,7 @@
    <li><a href="/chips">Colleagues</a></li>
    <li><a href="/salt">Sad moments</a></li>
   </ul>
-   <li><a href="/vinegar">Friends</a></li>
+   <li><a href="#" name="friends" onclick="javascript:tagCloud(this)">Friends</a></li>
 </div>
  </canvas>
 </div>
@@ -131,7 +131,15 @@ function showValue(newValue)
 {
 	document.getElementById("range").innerHTML=newValue;
 }
-
+function tagCloud(elem)
+{
+if (elem.name=="friends")
+{
+jQuery("#locationBar").hide();
+jQuery("#location").val("Dubai - United Arab Emirates");
+codeAddress();
+}
+}
 </script>
 
 </body>

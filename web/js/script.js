@@ -44,12 +44,17 @@ var myOptions = {
 function updateDate()
 
 {
+if (index!=7)
+{
 var rnddate=dates[Math.floor(Math.random()*dates.length)];
-var rndpeople=people[Math.floor(Math.random()*people.length)];
-
-document.getElementById('wtf').innerHTML="On "+rnddate;
-document.getElementById('wrong').innerHTML = "You were with "+rndpeople;
-var rnddate=dates[Math.floor(Math.random()*dates.length)];
+}
+else 
+{
+var rnddate="Tuesday, 25 December 2012";
+}
+if (index==4)
+var rndpeople="friends";
+else
 var rndpeople=people[Math.floor(Math.random()*people.length)];
 
 document.getElementById('wtf').innerHTML="On "+rnddate;
@@ -253,6 +258,7 @@ function showBar(place, status) {
 	if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
 		if(jQuery("#emotion").val()=="excited")
 		{ index=7;
+		console.log(jQuery("#datepicker").val());
 			path = memories[index];
 	jQuery("#map").html("<img src=\""+path+"/0.jpg\">");
 		}
