@@ -16,7 +16,7 @@ var path;
 var musicpath;
 var index;
 var dates = new Array("Monday - 25 January 2010", "Wednesday - 10 February 2010", "Thursday - 10 June 2010", "Thursday - 9 September 2010", "Tuesday - 5 October 2010", "Tuesday - 2 November 2010", "Tuesday - 5 April 2011", "Friday - 8 April 2011", "Tuesday - 26 July 2011", "Tuesday - 6 September 2011", "Tuesday - 13 September 2011", "Monday - 10 October 2011", "Friday - 8 June 2012", "Friday - 14 December 2012", "Thursday - 27 December 2012", "Monday - 7 January 2013", "Monday - 8 April 2013", "Monday, 1 July 2013", "Tuesday - 6 August 2013", "Friday - 11 October 2013","Tuesday - 25th December 2012");
-var people = new Array("Pierre","Enric","Federico","Emilie","Alizee","Riddhima","Tetsuaki","Simon","Karthik","Rishabh","Marshall","Yang Guang","Di Xiang");
+var people = new Array("Friends","Family","Acquaintances","Colleagues","Classmates","Relatives","Neighbors");
 var locations = new Array("Miami Beach, FL, United States","Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States","Fort Canning Park Singapore","Arab Street Singapore","Dubai - United Arab Emirates","Phnom Penh, Cambodia","Fujairah - United Arab Emirates","Cold Spring, NY, United States");
 var videos = new Array("http://www.youtube.com/embed/watch?v=-zmx0kScUss","http://www.youtube.com/embed/watch?v=Ik-sFkQqKD8;autoplay=1","http://www.youtube.com/embed/watch?v=zw2a64fp3No&iframe;autoplay=1","http://youtube.com/embed/watch?v=0xDNuWX5nUA?t=5s;autoplay=1","http://www.youtube.com/embed/watch?v=wOSci-rWf2Q;autoplay=1");
 var memories = new Array("images/photos/Memory1/","images/photos/Memory2/","images/photos/Memory3/","images/photos/Memory4/","images/photos/Memory5/","images/photos/Memory6/resized/","images/photos/Memory7/","images/photos/Memory8/");
@@ -109,7 +109,7 @@ var service = new google.maps.places.PlacesService(map);
 jQuery(document).ready(function(){
 	//detect string ?wherethefuck to trigger manual location entry
 	jQuery( "#showMoreButton" ).click(function() {
-  alert( "Handler for .click() called." );
+  //alert( "Handler for .click() called." );
 });
 
 	var str = window.location.href;
@@ -177,6 +177,7 @@ function currentLocation(position){
           		}
       		}
 			else {
+
         	console.log("Geocoder failed due to: " + status);
       		}
     	});
@@ -247,33 +248,18 @@ function chooseBar(results) {
 function showBar(place, status) {
 	 //var x=document.getElementById("viewport");
 	 document.getElementById('myCanvasContainer').style.display = 'none';
-
-	if (status == google.maps.places.PlacesServiceStatus.OK) {
-		//clear markers and set marker for chosen bar
-		for (i in markersArray) {
-      		//markersArray[i].setMap(null);
-    		}
-		drinkMarker = new google.maps.Marker({
-			map: map,
-			animation: google.maps.Animation.DROP,
-			position: place.geometry.location,
-			icon:drinkIcon
-		});
-		markersArray.push(drinkMarker);
-		
+					console.log("reached showbar");										  		
+	
+	if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+		if(jQuery("#emotion").val()=="excited")
+		{ index=7;
+			path = memories[index];
+	jQuery("#map").html("<img src=\""+path+"/0.jpg\">");
+		}
+	}
 		//get directions and show on map
 		placeName = place.name;
-		calcRoute(userLoc, place.geometry.location);
-		directionsDisplay.setMap(null);
-		//hide markers for directions
-		directionsDisplay.suppressMarkers = true;
-		//show custom polyline
-		directionsDisplay.polylineOptions = {
-			strokeColor: '#00aba6',
-			strokeOpacity: 0.8,
-			strokeWeight: 5
-			}; 
-		directionsDisplay.setMap(map);
+
 		
 		//if there's a website - show url
 		if (place.website){
@@ -281,19 +267,24 @@ function showBar(place, status) {
 			}
 		//otherwise show url to google places
 		else {
-			placeSite = place.url;
+			//placeSite = place.url;
 			
 		}
 		//add name and address details
 		placeAddress = place.formatted_address;
-		jQuery("#destination").html("YOU WERE AT <br/><a href='" + placeSite + "' target='_blank' title='VISIT THE WEBSITE'>" + locations[index] + "</a>")
-		jQuery("#address").html(placeAddress);
-		jQuery("#actions, #about, #recommendation, .ad")
-			.fadeIn(function(){
-				$wait.fadeOut();});
-		updateDate();
+		console.log("reached showbar2");
+		
+		
+		jQuery("#address").html(locations[index]);
+				$wait.delay(500).fadeOut("slow",function(){
+				jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + locations[index] + "</a>")
+				document.getElementById("map").style.visibility="visible";
+				document.getElementById("address").style.visibility="visible";
+				jQuery("#actions, #about, #recommendation, .ad").fadeIn(updateDate);
+				});
+		//updateDate();
 	}
-}
+
 
 
 //get directions
@@ -316,8 +307,7 @@ function calcRoute(start, end) {
  
 //manual geolocation
 function codeAddress() {
-	document.getElementById("map").style.visibility="visible";
-    document.getElementById("address").style.visibility="visible";
+
     //document.body.style.background = "";
     //document.body.style.backgroundColor = "#FFF";
               document.getElementById('myCanvasContainer').style.display = 'none';
@@ -344,8 +334,15 @@ function codeAddress() {
 			
 		}
 		else {
-			console.log("Geocode was not successful for the following reason: " + status);
-			showError("Can't find your location, try again");
+				console.log("reached");										  		
+
+			//console.log("Geocode was not successful for the following reason: " + status);
+			//showError("Can't find your location, try again");
+			jQuery("#omnom").show();
+			var place=new Object;
+			place.name="Dubai - United Arab Emirates";
+			place.formatted_address="Al Mamzar, Deira, Dubai"
+			showBar(place,google.maps.places.PlacesServiceStatus.ZERO_RESULTS);
 		}
 		});});
 }
