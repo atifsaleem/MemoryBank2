@@ -317,8 +317,10 @@ function calcRoute(start, end) {
 function codeAddress() {
 	document.getElementById("map").style.visibility="visible";
     document.getElementById("address").style.visibility="visible";
-    document.body.style.background = "";
-    document.body.style.backgroundColor = "#FFF";
+    //document.body.style.background = "";
+    //document.body.style.backgroundColor = "#FFF";
+              document.getElementById('myCanvasContainer').style.display = 'none';
+
 	$wait.fadeIn(function(){
 	$locationBar.fadeOut();
 	var address = document.getElementById("location").value;
