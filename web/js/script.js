@@ -246,7 +246,8 @@ function chooseBar(results) {
 //show bar details
 function showBar(place, status) {
 	 //var x=document.getElementById("viewport");
-	 //x.style.display='none';
+	 document.getElementById('myCanvasContainer').style.display = 'none';
+
 	if (status == google.maps.places.PlacesServiceStatus.OK) {
 		//clear markers and set marker for chosen bar
 		for (i in markersArray) {
