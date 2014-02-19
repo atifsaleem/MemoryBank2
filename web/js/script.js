@@ -15,12 +15,12 @@ var currentlatlng;
 var path;
 var musicpath;
 var index;
-var dates = new Array("Monday - 25 January 2010", "Wednesday - 10 February 2010", "Thursday - 10 June 2010", "Thursday - 9 September 2010", "Tuesday - 5 October 2010", "Tuesday - 2 November 2010", "Tuesday - 5 April 2011", "Friday - 8 April 2011", "Tuesday - 26 July 2011", "Tuesday - 6 September 2011", "Tuesday - 13 September 2011", "Monday - 10 October 2011", "Friday - 8 June 2012", "Friday - 14 December 2012", "Thursday - 27 December 2012", "Monday - 7 January 2013", "Monday - 8 April 2013", "Monday, 1 July 2013", "Tuesday - 6 August 2013", "Friday - 11 October 2013");
+var dates = new Array("Monday - 25 January 2010", "Wednesday - 10 February 2010", "Thursday - 10 June 2010", "Thursday - 9 September 2010", "Tuesday - 5 October 2010", "Tuesday - 2 November 2010", "Tuesday - 5 April 2011", "Friday - 8 April 2011", "Tuesday - 26 July 2011", "Tuesday - 6 September 2011", "Tuesday - 13 September 2011", "Monday - 10 October 2011", "Friday - 8 June 2012", "Friday - 14 December 2012", "Thursday - 27 December 2012", "Monday - 7 January 2013", "Monday - 8 April 2013", "Monday, 1 July 2013", "Tuesday - 6 August 2013", "Friday - 11 October 2013","Tuesday - 25th December 2012");
 var people = new Array("Pierre","Enric","Federico","Emilie","Alizee","Riddhima","Tetsuaki","Simon","Karthik","Rishabh","Marshall","Yang Guang","Di Xiang");
-var locations = new Array("Miami Beach, FL, United States","Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States","Fort Canning Park Singapore","Arab Street Singapore","Dubai - United Arab Emirates","Phnom Penh, Cambodia","Fujairah - United Arab Emirates");
+var locations = new Array("Miami Beach, FL, United States","Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States","Fort Canning Park Singapore","Arab Street Singapore","Dubai - United Arab Emirates","Phnom Penh, Cambodia","Fujairah - United Arab Emirates","Cold Spring, NY, United States");
 var videos = new Array("http://www.youtube.com/embed/watch?v=-zmx0kScUss","http://www.youtube.com/embed/watch?v=Ik-sFkQqKD8;autoplay=1","http://www.youtube.com/embed/watch?v=zw2a64fp3No&iframe;autoplay=1","http://youtube.com/embed/watch?v=0xDNuWX5nUA?t=5s;autoplay=1","http://www.youtube.com/embed/watch?v=wOSci-rWf2Q;autoplay=1");
-var memories = new Array("images/photos/Memory1/","images/photos/Memory2/","images/photos/Memory3/","images/photos/Memory4/","images/photos/Memory5/","images/photos/Memory6/resized/","images/photos/Memory7/");
-var music = new Array("music/island.m4a","music/peach.m4a","music/swing.m4a","music/bbq.m4a","music/lazyday.m4a","music/minuet.mp3","music/acoustic.m4a");
+var memories = new Array("images/photos/Memory1/","images/photos/Memory2/","images/photos/Memory3/","images/photos/Memory4/","images/photos/Memory5/","images/photos/Memory6/resized/","images/photos/Memory7/","images/photos/Memory8/");
+var music = new Array("music/island.m4a","music/peach.m4a","music/swing.m4a","music/bbq.m4a","music/lazyday.m4a","music/minuet.mp3","music/acoustic.m4a","music/acoustic.m4a");
 $wait = jQuery('#wait');
 $locationBar = jQuery('#locationBar')
 //map stuff
@@ -286,7 +286,7 @@ function showBar(place, status) {
 		}
 		//add name and address details
 		placeAddress = place.formatted_address;
-		jQuery("#destination").html("YOU WERE AT <br/><a href='" + placeSite + "' target='_blank' title='VISIT THE FUCKING WEBSITE'>" + placeName + "</a>")
+		jQuery("#destination").html("YOU WERE AT <br/><a href='" + placeSite + "' target='_blank' title='VISIT THE WEBSITE'>" + locations[index] + "</a>")
 		jQuery("#address").html(placeAddress);
 		jQuery("#actions, #about, #recommendation, .ad")
 			.fadeIn(function(){
@@ -326,7 +326,9 @@ function codeAddress() {
 	$locationBar.fadeOut();
 	var address = document.getElementById("location").value;
 	index = locations.indexOf(address);
+	
 	path = memories[index];
+	jQuery("#map").html("<img src=\""+path+"/0.jpg\">");
 	musicpath = music[index];
 	thismemory=address;
 	geocoder.geocode( { 'address': address}, function(results, status) {
