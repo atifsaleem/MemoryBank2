@@ -280,43 +280,56 @@ function codeAddress() {
 	var score=0;
 	var greatestScore=0;
 	for (i = 0; i < memories.length; ++i) {	
-    if(location==memories[i].location)
-	{
+    if(location.toLowerCase()==memories[i].location.toLowerCase())
+	{		console.log(location.toLowerCase()+"-"+memories[i].location.toLowerCase());
+
 	if (locationWeight>=50)
 	score+=2;
 	else score++;
 	}
 	if(date==memories[i].date)
 	{
+			console.log(date.toLowerCase()+"-"+memories[i].date.toLowerCase());
+
 	if (dateWeight>=50)
 	score+=2;
 	else score++;
 	}
-	if(memories[i].people.indexOf(people)!=-1)
-	{
+
+	if(memories[i].people.toLowerCase().indexOf(people) != -1 && people != "")
+	{	
+		console.log(people.toLowerCase()+"-"+memories[i].people.toLowerCase());
+
 	if (peopleWeight>=50)
 	score+=2;
 	else score++;
 	}
-	if(mood==memories[i].mood)
+	if(mood.toLowerCase()==memories[i].mood.toLowerCase() && mood!="")
 	{
+	console.log(mood.toLowerCase()+"-"+memories[i].mood.toLowerCase());
 	if (moodWeight>=50)
 	score+=2;
 	else score++;
 	}
 	if (score>greatestScore)
 	{ greatestScore = score;
+	if (index!=0)
+	{
 	var temp=playbackArray[0];
 	playbackArray[0]=memories[i];
 	playbackArray[index]=temp;
 	score=0;
+	}
+	else {playbackArray[0]=memories[i]}
 	index++;
 	continue;
 	}
 	if (score>=1)
+	{
 	playbackArray[index]=memories[i];
-	score=0;
 	index++;
+	}
+	score=0;
 	}
 	console.log("reached end of codeAddress");
 	showBar(playbackArray,0);
