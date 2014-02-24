@@ -30,99 +30,29 @@ $locationBar = jQuery('#locationBar')
 //
 //declare b&w google maps
 
-var lowSat = [{featureType: "all",stylers: [{ saturation: -100 }]}];
 //set map options
-var myOptions = {
-	zoom: 10,
-	mapTypeId: google.maps.MapTypeId.ROADMAP,
-	styles: lowSat,
-	mapTypeControl: false,
-	panControl: false,
-	zoomControl: true,
-	mapTypeControl: false,
-	scaleControl: false,
-	streetViewControl: false,
-	overviewMapControl: false
-};
 function updateDate()
 
 {
-if (index!=7)
-{
-var rnddate=dates[Math.floor(Math.random()*dates.length)];
-}
-else 
-{
-var rnddate="Tuesday, 25 December 2012";
-}
-if (index==4)
-var rndpeople="friends";
-else
-var rndpeople=people[Math.floor(Math.random()*people.length)];
 
-document.getElementById('wtf').innerHTML="On "+rnddate;
-document.getElementById('wrong').innerHTML = "You were with "+rndpeople;
-jQuery("#shit").click(function() {
-		/*
-		jQuery.fancybox([
-			path+'1.jpg',
-			path+'2.jpg',
-			path+'3.jpg'
-		], {
-			'padding'			: 0,
-			'transitionIn'		: 'none',
-			'transitionOut'		: 'none',
-			'type'              : 'image',
-			'changeFade'        : 0
-		});*/
-//jQuery.modal(,{); 
-var audio = new Audio(musicpath);
-audio.play();
-var pics;
-if (index==6)
-pics = "<div id=\"slider\"><img src=\""+path+"1.jpg\" alt=\"\" /><img src=\""+path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+path+"3.jpg\" alt=\"\" /></a><img src=\""+path+"4.jpg\" alt=\"\"/><img src=\""+path+"5.jpg\" alt=\"\"/><img src=\""+path+"6.jpg\" alt=\"\"/><img src=\""+path+"7.jpg\" alt=\"\"/><img src=\""+path+"8.jpg\" alt=\"\"/></div>";
-else if (index==5)
-pics = "<div id=\"slider\"><img src=\""+path+"1.jpg\" alt=\"\" /><img src=\""+path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+path+"3.jpg\" alt=\"\" /></a><img src=\""+path+"4.jpg\" alt=\"\"/><img src=\""+path+"5.jpg\" alt=\"\"/><img src=\""+path+"6.jpg\" alt=\"\"/><img src=\""+path+"7.jpg\" alt=\"\"/><img src=\""+path+"8.jpg\" alt=\"\"/><img src=\""+path+"9.jpg\" alt=\"\" /><img src=\""+path+"10.jpg\" alt=\"\" /></div>";
-else
-pics = "<div id=\"slider\"><img src=\""+path+"1.jpg\" alt=\"\" /><img src=\""+path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+path+"3.jpg\" alt=\"\" /></a><img src=\""+path+"1.jpg\" alt=\"\"/></div>" 
-jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
-	dialog.overlay.fadeIn('slow', function () {
-		dialog.data.hide();
-		dialog.container.fadeIn('slow', function () {
-			dialog.data.slideDown('slow');	 
-		});
-	});
-},onClose: function (dialog) {
-	audio.pause();
-	dialog.data.fadeOut('slow', function () {
-		dialog.container.hide('slow', function () {
-			dialog.overlay.slideUp('slow', function () {
-				$.modal.close();
-			});
-		});
-	});
-}});
-
-window.myFlux = new flux.slider('#slider');
-});
 }
 //create map
-map = new google.maps.Map(document.getElementById("map"), myOptions);
 //other map stuff
-geocoder = new google.maps.Geocoder();
-var service = new google.maps.places.PlacesService(map);
 
 
 //kick shit off 
 jQuery(document).ready(function(){
 	//detect string  to trigger manual location entry
 	jQuery( "#showMoreButton" ).click(function() {
-  //alert( "Handler for .click() called." );
+	alert('Hi!');
+	     jQuery("html, body").animate({ scrollTop: "750px" }, "slow");
+ jQuery(".weights").toggle("slow");
 });
+
 
 	var str = window.location.href;
 	var substr = str.split('?');
-	if(substr[1] == "wherethefuck"){			
+	if(substr[1] == "where"){			
 		$locationBar.css("opacity",1);
 		console.log ("manual location entry")
 		
@@ -253,43 +183,63 @@ function chooseBar(results) {
 }
 
 //show bar details
-function showBar(place, status) {
+function showBar(playbackArray, status) {
 	 //var x=document.getElementById("viewport");
 	 document.getElementById('myCanvasContainer').style.display = 'none';
 					console.log("reached showbar");										  		
 	
-	if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-		if(jQuery("#emotion").val()=="excited")
-		{ index=7;
-		console.log(jQuery("#datepicker").val());
-			path = memories[index];
-	jQuery("#map").html("<img src=\""+path+"/0.jpg\">");
-		}
-	}
-		//get directions and show on map
-		placeName = place.name;
 
-		
-		//if there's a website - show url
-		if (place.website){
-			placeSite = place.website;
-			}
-		//otherwise show url to google places
-		else {
-			//placeSite = place.url;
-			
-		}
-		//add name and address details
-		placeAddress = place.formatted_address;
+	jQuery("#map").html("<img src=\""+playbackArray[0].path+"/0.jpg\">");
+	document.getElementById('wtf').innerHTML="On "+playbackArray[0].date;
+	document.getElementById('wrong').innerHTML = "You were with "+playbackArray[0].people;
+	jQuery("#shit").click(function() {
+		/*
+		jQuery.fancybox([
+			path+'1.jpg',
+			path+'2.jpg',
+			path+'3.jpg'
+		], {
+			'padding'			: 0,
+			'transitionIn'		: 'none',
+			'transitionOut'		: 'none',
+			'type'              : 'image',
+			'changeFade'        : 0
+		});*/
+//jQuery.modal(,{); 
+var audio = new Audio(musicpath);
+audio.play();
+var pics;
+pics = "<div id=\"slider\"><img src=\""+path+"1.jpg\" alt=\"\" /><img src=\""+path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+path+"3.jpg\" alt=\"\" /></a><img src=\""+path+"1.jpg\" alt=\"\"/></div>" 
+jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
+	dialog.overlay.fadeIn('slow', function () {
+		dialog.data.hide();
+		dialog.container.fadeIn('slow', function () {
+			dialog.data.slideDown('slow');	 
+		});
+	});
+},onClose: function (dialog) {
+	audio.pause();
+	dialog.data.fadeOut('slow', function () {
+		dialog.container.hide('slow', function () {
+			dialog.overlay.slideUp('slow', function () {
+				$.modal.close();
+			});
+		});
+	});
+}});
+
+window.myFlux = new flux.slider('#slider');
+});
+
 		console.log("reached showbar2");
 		
 		
 		jQuery("#address").html(locations[index]);
 				$wait.delay(500).fadeOut("slow",function(){
-				jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + locations[index] + "</a>")
+				jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[0].location + "</a>")
 				document.getElementById("map").style.visibility="visible";
 				document.getElementById("address").style.visibility="visible";
-				jQuery("#actions, #about, #recommendation, .ad").fadeIn(updateDate);
+				jQuery("#actions, #about, #recommendation, .ad").fadeIn(updateDate());
 				});
 		//updateDate();
 	}
@@ -323,14 +273,56 @@ function codeAddress() {
 
 	$wait.fadeIn(function(){
 	$locationBar.fadeOut();
+	var filledFields = new Array();
 	var location = document.getElementById("location").value;
-	var locationWeight = document.getElementById("locationWeight").value();
-	var date=document.getElementById("datepicker").value();
-	var dateWeight = document.getElementById("dateWeight").value();
-	var people = document.getElementById("people").value();
-	var peopleWeight = document.getElementById("peopleWeight").value();
-	var mood = document.getElementById("emotion").value();
-	var moodWeight = document.getElementById("moodWeight").value();
+	var locationWeight = document.getElementById("locationWeight").value;
+	var date=document.getElementById("datepicker").value;
+	var dateWeight = document.getElementById("dateWeight").value;
+	var people = document.getElementById("people").value;
+	var peopleWeight = document.getElementById("peopleWeight").value;
+	var mood = document.getElementById("emotion").value;
+	var moodWeight = document.getElementById("moodWeight").value;
+	var playbackArray = new Array();
+	var index=0;
+	var score=0;
+	var greatestScore=0;
+	for (i = 0; i < memories.length; ++i) {	
+    if(location==memories[i].location)
+	{
+	if (locationWeight>=50)
+	score+=2;
+	else score++;
+	}
+	if(date==memories[i].date)
+	{
+	if (dateWeight>=50)
+	score+=2;
+	else score++;
+	}
+	if(memories[i].indexOf(people)!=-1)
+	{
+	if (peopleWeight>=50)
+	score+=2;
+	else score++;
+	}
+	if(mood==memories[i].mood)
+	{
+	if (moodWeight>=50)
+	score+=2;
+	else score++;
+	}
+	if (score>greatestScore)
+	{ greatestScore = score;
+	var temp=playbackArray[0];
+	playbackArray[0]=memories[i];
+	playbackArray[index]=temp;
+	score=0;
+	index++;
+	continue;
+	}
+	if (score>=1)
+	playbackArray[index]=memories[i];
+	}
 	/*
 	var address = document.getElementById("location").value;
 	index = memories.location.indexOf(address);
@@ -338,6 +330,7 @@ function codeAddress() {
 	jQuery("#map").html("<img src=\""+path+"/0.jpg\">");
 	musicpath = music[index];
 	thismemory=address;
+	
 	geocoder.geocode( { 'address': address}, function(results, status) {
 		console.log("manual location");										  		
 		if (status == google.maps.GeocoderStatus.OK) {
@@ -361,9 +354,12 @@ function codeAddress() {
 			place.formatted_address="Al Mamzar, Deira, Dubai"
 			showBar(place,google.maps.places.PlacesServiceStatus.ZERO_RESULTS);
 		}
-		});});
+		});
 		*/
+		});
+		
 }
+
 
 //choose another bar
 /*

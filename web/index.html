@@ -103,12 +103,8 @@
 <script src="js/tagcanvas.min.js" type="text/javascript"></script>
 <script type="text/javascript">
        window.onload = function() {
-	   jQuery( "#showMoreButton" ).click(function() {
-	     jQuery("html, body").animate({ scrollTop: "750px" }, "slow");
-
- jQuery(".weights").toggle("slow");
-});
         try {
+
           TagCanvas.Start('myCanvas','tags',{
             textColour: '#000000',
             outlineColour: '#c0c0c0',

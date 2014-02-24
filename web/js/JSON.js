@@ -1,66 +1,66 @@
 var memories = [
   {
-    "ID":1,
-    "Location":"Miami Beach, FL, United States",
-    "Date":"2012-10-20",
-    "People":"Friends,Classmates",
-    "Mood":"Excited",
-    "Path":"images/photos/Memory1/"
+    "id":1,
+    "location":"Miami Beach, FL, United States",
+    "date":"2012-10-20",
+    "people":"Friends,Classmates",
+    "mood":"Excited",
+    "path":"images/photos/Memory1/"
   },
   {
-    "ID":2,
-    "Location":"Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States",
-    "Date":"2012-07-09",
-    "People":"Friends,Acquaintances",
-    "Mood":"Excited",
-    "Path":"images/photos/Memory2/"
+    "id":2,
+    "location":"Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States",
+    "date":"2012-07-09",
+    "people":"Friends,Acquaintances",
+    "mood":"Excited",
+    "path":"images/photos/Memory2/"
   },
   {
-    "ID":3,
-    "Location":"Fort Canning Park Singapore",
-    "Date":"2012-01-15",
-    "People":"Classmates,Acquaintances",
-    "Mood":"Neutral",
-    "Path":"images/photos/Memory3/"
+    "id":3,
+    "location":"Fort Canning Park Singapore",
+    "date":"2012-01-15",
+    "people":"Classmates,Acquaintances",
+    "mood":"Neutral",
+    "path":"images/photos/Memory3/"
   },
   {
-    "ID":4,
-    "Location":"Arab Street Singapore",
-    "Date":"2013-07-26",
-    "People":"Friends",
-    "Mood":"Excited",
-    "Path":"images/photos/Memory4"
+    "id":4,
+    "location":"Arab Street Singapore",
+    "date":"2013-07-26",
+    "people":"Friends",
+    "mood":"Excited",
+    "path":"images/photos/Memory4"
   },
   {
-    "ID":5,
-    "Location":"Dubai - United Arab Emirates",
-    "Date":"2011-07-22",
-    "People":"Friends",
-    "Mood":"Pleased",
-    "Path":"images/photos/Memory5/"
+    "id":5,
+    "location":"Dubai - United Arab Emirates",
+    "date":"2011-07-22",
+    "people":"Friends",
+    "mood":"Pleased",
+    "path":"images/photos/Memory5/"
   },
   {
-    "ID":6,
-    "Location":"Phnom Penh, Cambodia",
-    "Date":"2011-07-28",
-    "People":"Family",
-    "Mood":"Excited",
-    "Path":"images/photos/Memory6/resized/"
+    "id":6,
+    "location":"Phnom Penh, Cambodia",
+    "date":"2011-07-28",
+    "people":"Family",
+    "mood":"Excited",
+    "path":"images/photos/Memory6/resized/"
   },
   {
-    "ID":7,
-    "Location":"Fujairah - United Arab Emirates",
-    "Date":"2013-02-10",
-    "People":"Friends",
-    "Mood":"Pleased",
-    "Path":"images/photos/Memory7/"
+    "id":7,
+    "location":"Fujairah - United Arab Emirates",
+    "date":"2013-02-10",
+    "people":"Friends",
+    "mood":"Pleased",
+    "path":"images/photos/Memory7/"
   },
   {
-    "ID":8,
-    "Location":"Cold Spring, NY, United States",
-    "Date":"2011-12-25",
-    "People":"Classmates,Acquaintances",
-    "Mood":"Excited",
-    "Path":"images/photos/Memory8/"
+    "id":8,
+    "location":"Cold Spring, NY, United States",
+    "date":"2011-12-25",
+    "people":"Classmates,Acquaintances",
+    "mood":"Excited",
+    "path":"images/photos/Memory8/"
   }
 ]
