@@ -34,12 +34,12 @@
   <p>Anything in here will be replaced on browsers that support the canvas element</p>
     <div id="tags">
 	<ul>
-   <li><a href="http://www.google.com" target="_blank">Family</a></li>
-   <li><a href="/fish">Happy moments</a></li>
-   <li><a href="/chips">Colleagues</a></li>
-   <li><a href="/salt">Sad moments</a></li>
+   <li><a href="#" id="family" name="people" onclick="javascript:tagCloud(this)">Family</a></li>
+   <li><a href="#" id="pleased" name="emotion" onclick="javascript:tagCloud(this)">Happy moments</a></li>
+   <li><a href="#" id="colleagues" name="people" onclick="javascript:tagCloud(this)">Colleagues</a></li>
+   <li><a href="#" id="sad" name="people" onclick="javascript:tagCloud(this)">Sad moments</a></li>
   </ul>
-   <li><a href="#" name="friends" onclick="javascript:tagCloud(this)">Friends</a></li>
+   <li><a href="#" id="friends" name="people" onclick="javascript:tagCloud(this)">Friends</a></li>
 </div>
  </canvas>
 </div>
@@ -124,13 +124,9 @@
       };
 
 function tagCloud(elem)
-{
-if (elem.name=="friends")
-{
-jQuery("#locationBar").hide();
-jQuery("#location").val("Dubai - United Arab Emirates");
+{alert(elem.name);
+jQuery("#"+elem.name).val(elem.id);
 codeAddress();
-}
 }
 </script>
 
