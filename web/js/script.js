@@ -43,13 +43,6 @@ function updateDate()
 //kick shit off 
 jQuery(document).ready(function(){
 	//detect string  to trigger manual location entry
-	jQuery( "#showMoreButton" ).click(function() {
-	alert('Hi!');
-	     jQuery("html, body").animate({ scrollTop: "750px" }, "slow");
- jQuery(".weights").toggle("slow");
-});
-
-
 	var str = window.location.href;
 	var substr = str.split('?');
 	if(substr[1] == "where"){			
@@ -234,7 +227,7 @@ window.myFlux = new flux.slider('#slider');
 		console.log("reached showbar2");
 		
 		
-		jQuery("#address").html(locations[index]);
+		jQuery("#address").html(playbackArray[0].location);
 				$wait.delay(500).fadeOut("slow",function(){
 				jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[0].location + "</a>")
 				document.getElementById("map").style.visibility="visible";
@@ -299,7 +292,7 @@ function codeAddress() {
 	score+=2;
 	else score++;
 	}
-	if(memories[i].indexOf(people)!=-1)
+	if(memories[i].people.indexOf(people)!=-1)
 	{
 	if (peopleWeight>=50)
 	score+=2;
@@ -322,7 +315,11 @@ function codeAddress() {
 	}
 	if (score>=1)
 	playbackArray[index]=memories[i];
+	score=0;
+	index++;
 	}
+	console.log("reached end of codeAddress");
+	showBar(playbackArray,0);
 	/*
 	var address = document.getElementById("location").value;
 	index = memories.location.indexOf(address);
@@ -392,6 +389,10 @@ function showError(msg){
 	$locationBar.fadeIn();
 	jQuery("#error span").css("background","white").css("opacity","0.8");
 	jQuery('#error').html("<span>"+msg+"</span><a id=\"showMoreButton\"><img src=\"images/showmore.png\" id=\"showMore\"></a>").fadeIn();
+	jQuery("#showMoreButton").click(function(){
+	jQuery("html, body").animate({ scrollTop: "750px" }, "slow");
+	jQuery(".weights").toggle("slow");
+	});
 }
 
 
