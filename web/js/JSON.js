@@ -5,7 +5,8 @@ var memories = [
     "date":"2012-10-20",
     "people":"Friends,Classmates",
     "mood":"Excited",
-    "path":"images/photos/Memory1/"
+    "path":"images/photos/Memory1/",
+    "num":3
   },
   {
     "id":2,
@@ -13,7 +14,8 @@ var memories = [
     "date":"2012-07-09",
     "people":"Friends,Acquaintances",
     "mood":"Excited",
-    "path":"images/photos/Memory2/"
+    "path":"images/photos/Memory2/",
+    "num":3
   },
   {
     "id":3,
@@ -21,7 +23,9 @@ var memories = [
     "date":"2012-01-15",
     "people":"Classmates,Acquaintances",
     "mood":"Neutral",
-    "path":"images/photos/Memory3/"
+    "path":"images/photos/Memory3/",
+    "num":3
+
   },
   {
     "id":4,
@@ -29,7 +33,8 @@ var memories = [
     "date":"2013-07-26",
     "people":"Friends",
     "mood":"Excited",
-    "path":"images/photos/Memory4"
+    "path":"images/photos/Memory4",
+    "num":3
   },
   {
     "id":5,
@@ -37,7 +42,9 @@ var memories = [
     "date":"2011-07-22",
     "people":"Friends",
     "mood":"Pleased",
-    "path":"images/photos/Memory5/"
+    "path":"images/photos/Memory5/",
+    "num":3
+
   },
   {
     "id":6,
@@ -45,7 +52,8 @@ var memories = [
     "date":"2011-07-28",
     "people":"Family",
     "mood":"Excited",
-    "path":"images/photos/Memory6/resized/"
+    "path":"images/photos/Memory6/resized/",
+    "num":10
   },
   {
     "id":7,
@@ -53,7 +61,8 @@ var memories = [
     "date":"2013-02-10",
     "people":"Friends",
     "mood":"Pleased",
-    "path":"images/photos/Memory7/"
+    "path":"images/photos/Memory7/",
+    "num":9
   },
   {
     "id":8,
@@ -61,6 +70,7 @@ var memories = [
     "date":"2011-12-25",
     "people":"Classmates,Acquaintances",
     "mood":"Excited",
-    "path":"images/photos/Memory8/"
+    "path":"images/photos/Memory8/",
+    "num":10
   }
 ]

@@ -172,6 +172,7 @@ float:left;
 	height: 300px;
 	width: 100%;
 	background: #fff !important
+	overflow:hidden;
 }
 
 #address {

@@ -202,7 +202,12 @@ function showBar(playbackArray, status) {
 var audio = new Audio(music[playbackArray[0].mood.toLowerCase()]);
 audio.play();
 var pics;
-pics = "<div id=\"slider\"><img src=\""+playbackArray[0].path+"1.jpg\" alt=\"\" /><img src=\""+playbackArray[0].path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+playbackArray[0].path+"3.jpg\" alt=\"\" /></a><img src=\""+playbackArray[0].path+"1.jpg\" alt=\"\"/></div>" 
+pics = "<div id=\"slider\">" 
+for (i=1;i<=playbackArray[0].num;i++)
+{
+	pics+="<img src=\""+playbackArray[0].path+i+".jpg\" alt=\"\" />";
+}
+pics+="</div>";
 jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
 	dialog.overlay.fadeIn('slow', function () {
 		dialog.data.hide();
