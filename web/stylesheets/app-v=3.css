@@ -27,6 +27,7 @@ body {
 	position: relative;
 	background-color: #005A93;
 	background-repeat: no-repeat;
+
 }
 
 input {
@@ -171,7 +172,7 @@ float:left;
 	visibility: hidden;
 	height: 300px;
 	width: 100%;
-	background: #fff !important
+	background: #fff !important;
 	overflow:hidden;
 }
 

@@ -176,15 +176,27 @@ function chooseBar(results) {
 }
 
 //show bar details
-function showBar(playbackArray, status) {
-	 //var x=document.getElementById("viewport");
+function showBar(playbackArray, k) {
 	 document.getElementById('myCanvasContainer').style.display = 'none';
-					console.log("reached showbar");										  		
-	
+	 console.log("reached showbar");										  		
+	 jQuery("body").css("-webkit-filter","blur(0px)");
+	 jQuery("body").css("filter","blur(0px)");
 
-	jQuery("#map").html("<img src=\""+playbackArray[0].path+"/0.jpg\">");
-	document.getElementById('wtf').innerHTML="On "+playbackArray[0].date;
-	document.getElementById('wrong').innerHTML = "You were with "+playbackArray[0].people;
+	jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[k].location + "</a>")
+
+	jQuery("#map").html("<img src=\""+playbackArray[k].path+"/0.jpg\">");
+	document.getElementById('wtf').innerHTML="On "+playbackArray[k].date;
+	document.getElementById('wrong').innerHTML = "You were with "+playbackArray[k].people;
+	var audio = new Audio(music[playbackArray[k].mood.toLowerCase()]);
+	var pics;
+	pics = "<div id=\"slider\">" 
+	for (i=1;i<=playbackArray[k].num;i++)
+	{
+	pics+="<img name="+i+" src=\""+playbackArray[k].path+i+".jpg\" alt=\"\" />";
+	}
+	pics+="</div>";
+	console.log(pics);
+
 	jQuery("#shit").click(function() {
 		/*
 		jQuery.fancybox([
@@ -199,16 +211,9 @@ function showBar(playbackArray, status) {
 			'changeFade'        : 0
 		});*/
 //jQuery.modal(,{); 
-var audio = new Audio(music[playbackArray[0].mood.toLowerCase()]);
-audio.play();
-var pics;
-pics = "<div id=\"slider\">" 
-for (i=1;i<=playbackArray[0].num;i++)
-{
-	pics+="<img src=\""+playbackArray[0].path+i+".jpg\" alt=\"\" />";
-}
-pics+="</div>";
-jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
+	audio.play();
+
+	jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
 	dialog.overlay.fadeIn('slow', function () {
 		dialog.data.hide();
 		dialog.container.fadeIn('slow', function () {
@@ -226,15 +231,27 @@ jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: fu
 	});
 }});
 
-window.myFlux = new flux.slider('#slider');
+window.myFlux = new flux.slider('#slider', {
+            onTransitionEnd: function(data) {
+        var img = data.currentImage;
+        var cur = img.name;
+        if (img.name==playbackArray[k].num)
+ 		{	window.myFlux.stop();
+	 jQuery("body").css("-webkit-filter","blur(10px)");
+	 jQuery("body").css("filter","blur(10px)");
+ 			$.modal.close();
+ 			showBar(playbackArray,k+1);       
+ 		}
+            }
+    });
 });
+
 
 		console.log("reached showbar2");
 		
 		
 		jQuery("#address").html(playbackArray[0].location);
 				$wait.delay(500).fadeOut("slow",function(){
-				jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[0].location + "</a>")
 				document.getElementById("map").style.visibility="visible";
 				document.getElementById("address").style.visibility="visible";
 				jQuery("#actions, #about, #recommendation, .ad").fadeIn(updateDate());

@@ -33,7 +33,7 @@ var memories = [
     "date":"2013-07-26",
     "people":"Friends",
     "mood":"Excited",
-    "path":"images/photos/Memory4",
+    "path":"images/photos/Memory4/",
     "num":3
   },
   {
