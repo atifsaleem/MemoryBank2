@@ -22,7 +22,7 @@ var locations = new Array("Miami Beach, FL, United States","Universal Studios Or
 var videos = new Array("http://www.youtube.com/embed/watch?v=-zmx0kScUss","http://www.youtube.com/embed/watch?v=Ik-sFkQqKD8;autoplay=1","http://www.youtube.com/embed/watch?v=zw2a64fp3No&iframe;autoplay=1","http://youtube.com/embed/watch?v=0xDNuWX5nUA?t=5s;autoplay=1","http://www.youtube.com/embed/watch?v=wOSci-rWf2Q;autoplay=1");
 var memories = new Array("images/photos/Memory1/","images/photos/Memory2/","images/photos/Memory3/","images/photos/Memory4/","images/photos/Memory5/","images/photos/Memory6/resized/","images/photos/Memory7/","images/photos/Memory8/");
 */
-var music = new Array("music/island.m4a","music/peach.m4a","music/swing.m4a","music/bbq.m4a","music/lazyday.m4a","music/minuet.mp3","music/acoustic.m4a","music/acoustic.m4a");
+var music = {'pleased':"music/island.m4a",'excited':"music/peach.m4a",'content':"music/swing.m4a",'aroused':"music/bbq.m4a",'sleepy':"music/lazyday.m4a",'depressed':"music/minuet.mp3",'miserable':"music/acoustic.m4a",'distressed':"music/acoustic.m4a",'neutral':"music/acoustic.m4a"};
 
 $wait = jQuery('#wait');
 $locationBar = jQuery('#locationBar')
@@ -199,10 +199,10 @@ function showBar(playbackArray, status) {
 			'changeFade'        : 0
 		});*/
 //jQuery.modal(,{); 
-var audio = new Audio(musicpath);
+var audio = new Audio(music[playbackArray[0].mood.toLowerCase()]);
 audio.play();
 var pics;
-pics = "<div id=\"slider\"><img src=\""+path+"1.jpg\" alt=\"\" /><img src=\""+path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+path+"3.jpg\" alt=\"\" /></a><img src=\""+path+"1.jpg\" alt=\"\"/></div>" 
+pics = "<div id=\"slider\"><img src=\""+playbackArray[0].path+"1.jpg\" alt=\"\" /><img src=\""+playbackArray[0].path+"2.jpg\" alt=\"\" title=\"Ironman Screenshot\" /><a href=\"\"><img src=\""+playbackArray[0].path+"3.jpg\" alt=\"\" /></a><img src=\""+playbackArray[0].path+"1.jpg\" alt=\"\"/></div>" 
 jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
 	dialog.overlay.fadeIn('slow', function () {
 		dialog.data.hide();
