@@ -15,6 +15,7 @@ var currentlatlng;
 var path;
 var musicpath;
 var index;
+var curmemorynum=0;
 /*
 var dates = new Array("Monday - 25 January 2010", "Wednesday - 10 February 2010", "Thursday - 10 June 2010", "Thursday - 9 September 2010", "Tuesday - 5 October 2010", "Tuesday - 2 November 2010", "Tuesday - 5 April 2011", "Friday - 8 April 2011", "Tuesday - 26 July 2011", "Tuesday - 6 September 2011", "Tuesday - 13 September 2011", "Monday - 10 October 2011", "Friday - 8 June 2012", "Friday - 14 December 2012", "Thursday - 27 December 2012", "Monday - 7 January 2013", "Monday - 8 April 2013", "Monday, 1 July 2013", "Tuesday - 6 August 2013", "Friday - 11 October 2013","Tuesday - 25th December 2012");
 var people = new Array("Friends","Family","Acquaintances","Colleagues","Classmates","Relatives","Neighbors");
@@ -177,6 +178,7 @@ function chooseBar(results) {
 
 //show bar details
 function showBar(playbackArray, k) {
+	 curmemorynum=0;
 	 document.getElementById('myCanvasContainer').style.display = 'none';
 	 console.log("reached showbar");										  		
 	 jQuery("body").css("-webkit-filter","blur(0px)");
@@ -189,10 +191,13 @@ function showBar(playbackArray, k) {
 	document.getElementById('wrong').innerHTML = "You were with "+playbackArray[k].people;
 	var audio = new Audio(music[playbackArray[k].mood.toLowerCase()]);
 	var pics;
-	pics = "<div id=\"slider\">" 
-	for (i=1;i<=playbackArray[k].num;i++)
+	pics = "<div id=\"slider\">";
+	for (j=0;j<playbackArray.length;j++)
 	{
-	pics+="<img name="+i+" src=\""+playbackArray[k].path+i+".jpg\" alt=\"\" />";
+	for (i=1;i<=playbackArray[j].num;i++)
+	{
+	pics+="<img name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
+	}
 	}
 	pics+="</div>";
 	console.log(pics);
@@ -211,8 +216,8 @@ function showBar(playbackArray, k) {
 			'changeFade'        : 0
 		});*/
 //jQuery.modal(,{); 
-	audio.play();
 
+	audio.play();
 	jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
 	dialog.overlay.fadeIn('slow', function () {
 		dialog.data.hide();
@@ -232,15 +237,23 @@ function showBar(playbackArray, k) {
 }});
 
 window.myFlux = new flux.slider('#slider', {
-            onTransitionEnd: function(data) {
+        transitions: ['slide'],
+        onTransitionEnd: function(data) {
         var img = data.currentImage;
         var cur = img.name;
-        if (img.name==playbackArray[k].num)
- 		{	window.myFlux.stop();
-	 jQuery("body").css("-webkit-filter","blur(10px)");
-	 jQuery("body").css("filter","blur(10px)");
- 			$.modal.close();
- 			showBar(playbackArray,k+1);       
+        if (img.name==playbackArray[curmemorynum].num)
+ 		{	curmemorynum++;
+ 			jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[curmemorynum].location + "</a>")
+ 			jQuery("#address").html(playbackArray[curmemorynum].location);
+			jQuery("#map").html("<img src=\""+playbackArray[curmemorynum].path+"/0.jpg\">");
+			document.getElementById('wtf').innerHTML="On "+playbackArray[curmemorynum].date;
+			document.getElementById('wrong').innerHTML = "You were with "+playbackArray[curmemorynum].people;
+			if (playbackArray[curmemorynum-1].mood != playbackArray[curmemorynum].mood)
+			{audio.pause();
+			audio = new Audio(music[playbackArray[curmemorynum].mood.toLowerCase()]);
+			audio.play();
+			}
+ 			window.myFlux.next('turn');
  		}
             }
     });
