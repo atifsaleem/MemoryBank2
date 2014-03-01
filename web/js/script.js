@@ -179,7 +179,7 @@ function chooseBar(results) {
 //show bar details
 function showBar(playbackArray, k) {
 	 curmemorynum=0;
-	 document.getElementById('myCanvasContainer').style.display = 'none';
+	 //document.getElementById('myCanvasContainer').style.display = 'none';
 	 console.log("reached showbar");										  		
 	 jQuery("body").css("-webkit-filter","blur(0px)");
 	 jQuery("body").css("filter","blur(0px)");
@@ -275,8 +275,8 @@ window.myFlux = new flux.slider('#slider', {
 
 
 //get directions
-var directionsDisplay =  new google.maps.DirectionsRenderer();
-var directionsService = new google.maps.DirectionsService();
+//var directionsDisplay =  new google.maps.DirectionsRenderer();
+//var directionsService = new google.maps.DirectionsService();
 function calcRoute(start, end) {
   	var request = {
     	origin:start,
@@ -297,7 +297,6 @@ function codeAddress() {
 
     //document.body.style.background = "";
     //document.body.style.backgroundColor = "#FFF";
-              document.getElementById('myCanvasContainer').style.display = 'none';
 
 	$wait.fadeIn(function(){
 	$locationBar.fadeOut();
@@ -447,7 +446,7 @@ function showError(msg){
 //google geocode autocomplete
 var autoOptions = {types: ['geocode']};
 var autoInput = document.getElementById('location');
-autocomplete = new google.maps.places.Autocomplete(autoInput, autoOptions);
+//autocomplete = new google.maps.places.Autocomplete(autoInput, autoOptions);
 
 //remove duplicate objects in array
 function removeDupes(arr, prop) {
