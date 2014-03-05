@@ -6,7 +6,7 @@ var memories = [
     "people":"Friends,Classmates",
     "mood":"Excited",
     "path":"images/photos/Memory1/",
-    "num":3
+    "num":5
   },
   {
     "id":2,
@@ -15,7 +15,7 @@ var memories = [
     "people":"Friends,Acquaintances",
     "mood":"Excited",
     "path":"images/photos/Memory2/",
-    "num":3
+    "num":5
   },
   {
     "id":3,
@@ -24,7 +24,7 @@ var memories = [
     "people":"Classmates,Acquaintances",
     "mood":"Neutral",
     "path":"images/photos/Memory3/",
-    "num":3
+    "num":4
 
   },
   {
@@ -34,7 +34,7 @@ var memories = [
     "people":"Friends",
     "mood":"Excited",
     "path":"images/photos/Memory4/",
-    "num":3
+    "num":5
   },
   {
     "id":5,
@@ -71,6 +71,6 @@ var memories = [
     "people":"Classmates,Acquaintances",
     "mood":"Excited",
     "path":"images/photos/Memory8/",
-    "num":10
+    "num":8
   }
 ]

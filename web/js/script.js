@@ -44,6 +44,31 @@ function updateDate()
 //kick shit off 
 jQuery(document).ready(function(){
 	//detect string  to trigger manual location entry
+	   var availableMoods = [
+      "pleased",
+      "excited",
+      "content",
+      "aroused",
+      "sleepy",
+      "depressed",
+      "miserable",
+      "distressed",
+      "neutral",
+    ];
+    var availablePeople = [
+      "friends",
+      "acquaintances",
+      "classmates",
+      "family",
+      "neighbors",
+    ];
+    jQuery( "#emotion" ).autocomplete({
+      source: availableMoods
+    });
+    jQuery( "#people" ).autocomplete({
+      source: availablePeople
+    });
+	document.body.style.background = "url('images/bg.jpg')";
 	var str = window.location.href;
 	var substr = str.split('?');
 	if(substr[1] == "where"){			
@@ -150,7 +175,7 @@ function storeRequestBar(request) {
 
 //store the results for pubs & combine
 function storeRequestPub(request) {
-	//if (status == google.maps.places.PlacesServiceStatus.OK)
+	if (status == google.maps.places.PlacesServiceStatus.OK)
 	pubResultsStore = request;
 	//combine pubs & bars into one array
 	totalResults = barResultsStore.concat(pubResultsStore)
@@ -177,87 +202,66 @@ function chooseBar(results) {
 }
 
 //show bar details
-function showBar(playbackArray, k) {
+function showBar(playbackArray, k, oneormany) {
+
 	 curmemorynum=0;
 	 //document.getElementById('myCanvasContainer').style.display = 'none';
-	 console.log("reached showbar");										  		
-	 jQuery("body").css("-webkit-filter","blur(0px)");
-	 jQuery("body").css("filter","blur(0px)");
-
-	jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[k].location + "</a>")
-
-	jQuery("#map").html("<img src=\""+playbackArray[k].path+"/0.jpg\">");
+	 console.log("reached showbar");
+	 jQuery("#quicklinks").hide();
+	jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='#' title='VISIT THE WEBSITE'>" + playbackArray[k].location + "</a>")
+	jQuery("#related").css("visibility","visible");
 	document.getElementById('wtf').innerHTML="On "+playbackArray[k].date;
 	document.getElementById('wrong').innerHTML = "You were with "+playbackArray[k].people;
-	var audio = new Audio(music[playbackArray[k].mood.toLowerCase()]);
+	document.getElementById('shit').innerHTML = "You were "+playbackArray[k].mood;
 	var pics;
-	pics = "<div id=\"slider\">";
+	audio = new Audio(music[playbackArray[k].mood.toLowerCase()]);
+	pics="<div onclick=\"javascript:playSlideshow(audio);\" id=\"playOverlay\" style=\"height: 480px; position: absolute; top: 0px; left: 0px; background-image: url('images/overlay.png'); z-index: 102; cursor: pointer;\"></div>";
+	pics += "<div id=\"slider\" onclick=\"javascript:playSlideshow(audio);\">";
 	for (j=0;j<playbackArray.length;j++)
 	{
-	for (i=1;i<=playbackArray[j].num;i++)
+	
+	var relatedBar = "<div class=\"related-divs\" id=\"related-"+playbackArray[j].location.replace(/\s+/g,'').replace(/\,/g,'')+"\"><span class=\"relatedimage\">"+"<img src=\""+playbackArray[j].path+"0.jpg\"></span><span class=\"relatedcaption\">"+playbackArray[j].location+"</span></div>"	
+	jQuery("#related").append(relatedBar);
+	for (i=0;i<=playbackArray[j].num;i++)
 	{
-	pics+="<img name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
+	pics+="<img width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
 	}
 	}
 	pics+="</div>";
 	console.log(pics);
-
-	jQuery("#shit").click(function() {
-		/*
-		jQuery.fancybox([
-			path+'1.jpg',
-			path+'2.jpg',
-			path+'3.jpg'
-		], {
-			'padding'			: 0,
-			'transitionIn'		: 'none',
-			'transitionOut'		: 'none',
-			'type'              : 'image',
-			'changeFade'        : 0
-		});*/
-//jQuery.modal(,{); 
-
-	audio.play();
-	jQuery.modal(pics,{opacity: 50, overlayCss: {backgroundColor:"#000"}, onOpen: function (dialog) {
-	dialog.overlay.fadeIn('slow', function () {
-		dialog.data.hide();
-		dialog.container.fadeIn('slow', function () {
-			dialog.data.slideDown('slow');	 
-		});
-	});
-},onClose: function (dialog) {
-	audio.pause();
-	dialog.data.fadeOut('slow', function () {
-		dialog.container.hide('slow', function () {
-			dialog.overlay.slideUp('slow', function () {
-				$.modal.close();
-			});
-		});
-	});
-}});
+	jQuery('div.related-divs').foggy();
+	jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
+	//jQuery("#map").html("<img src=\""+playbackArray[k].path+"/0.jpg\">");
+	jQuery("#map").html(pics);
 
 window.myFlux = new flux.slider('#slider', {
+        autoplay: false,
         transitions: ['slide'],
         onTransitionEnd: function(data) {
         var img = data.currentImage;
         var cur = img.name;
         if (img.name==playbackArray[curmemorynum].num)
  		{	curmemorynum++;
- 			jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[curmemorynum].location + "</a>")
- 			jQuery("#address").html(playbackArray[curmemorynum].location);
-			jQuery("#map").html("<img src=\""+playbackArray[curmemorynum].path+"/0.jpg\">");
-			document.getElementById('wtf').innerHTML="On "+playbackArray[curmemorynum].date;
-			document.getElementById('wrong').innerHTML = "You were with "+playbackArray[curmemorynum].people;
-			if (playbackArray[curmemorynum-1].mood != playbackArray[curmemorynum].mood)
+ 			if (curmemorynum==playbackArray.length)
+ 				{curmemorynum=0;
+ 				 window.myFlux.next('turn');
+ 				}
+ 			if (playbackArray[curmemorynum-1].mood != playbackArray[curmemorynum].mood)
 			{audio.pause();
 			audio = new Audio(music[playbackArray[curmemorynum].mood.toLowerCase()]);
-			audio.play();
-			}
- 			window.myFlux.next('turn');
+			audio.play();}
+			window.myFlux.next('turn');
+		}
+ 			jQuery('div.related-divs').foggy();
+			jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
+
+ 			jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[curmemorynum].location + "</a>")
+ 			jQuery("#address").html(playbackArray[curmemorynum].location);
+			document.getElementById('wtf').innerHTML="On "+playbackArray[curmemorynum].date;
+			document.getElementById('wrong').innerHTML = "You were with "+playbackArray[curmemorynum].people;
  		}
             }
-    });
-});
+    );
 
 
 		console.log("reached showbar2");
@@ -275,8 +279,8 @@ window.myFlux = new flux.slider('#slider', {
 
 
 //get directions
-//var directionsDisplay =  new google.maps.DirectionsRenderer();
-//var directionsService = new google.maps.DirectionsService();
+var directionsDisplay =  new google.maps.DirectionsRenderer();
+var directionsService = new google.maps.DirectionsService();
 function calcRoute(start, end) {
   	var request = {
     	origin:start,
@@ -293,13 +297,11 @@ function calcRoute(start, end) {
 
  
 //manual geolocation
-function codeAddress() {
+function codeAddress(elem) {
 
     //document.body.style.background = "";
     //document.body.style.backgroundColor = "#FFF";
-
 	$wait.fadeIn(function(){
-	$locationBar.fadeOut();
 	var filledFields = new Array();
 	var location = document.getElementById("location").value;
 	var locationWeight = document.getElementById("locationWeight").value;
@@ -366,7 +368,16 @@ function codeAddress() {
 	score=0;
 	}
 	console.log("reached end of codeAddress");
-	showBar(playbackArray,0);
+	if (index>0)
+	{	$locationBar.fadeOut();
+	showBar(playbackArray,0,0);
+	}
+	else
+	{
+	$wait.hide();
+	$locationBar.fadeIn();	
+	jQuery('.message').hide().html("No Memories Found!").fadeIn();
+	}
 	/*
 	var address = document.getElementById("location").value;
 	index = memories.location.indexOf(address);
@@ -446,7 +457,7 @@ function showError(msg){
 //google geocode autocomplete
 var autoOptions = {types: ['geocode']};
 var autoInput = document.getElementById('location');
-//autocomplete = new google.maps.places.Autocomplete(autoInput, autoOptions);
+autocomplete = new google.maps.places.Autocomplete(autoInput, autoOptions);
 
 //remove duplicate objects in array
 function removeDupes(arr, prop) {
@@ -462,4 +473,24 @@ function removeDupes(arr, prop) {
     }
  
     return new_arr;
+}
+var x=false;
+function playSlideshow(audio)
+{
+	if (window.myFlux.isPlaying())
+		{
+		audio.pause()
+		window.myFlux.stop();
+		jQuery("#playOverlay").show();
+		}
+	else
+		{audio.play();
+		window.myFlux.start();	
+		jQuery("#playOverlay").hide();
+		}	
+}
+function relatedClick(loc)
+{
+document.getElementById("location").value=loc;
+codeAddress();
 }
