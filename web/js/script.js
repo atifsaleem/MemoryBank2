@@ -236,7 +236,7 @@ function showBar(playbackArray, k, oneormany) {
 
 window.myFlux = new flux.slider('#slider', {
         autoplay: false,
-        transitions: ['slide'],
+        transitions: ['dissolve'],
         onTransitionEnd: function(data) {
         var img = data.currentImage;
         var cur = img.name;

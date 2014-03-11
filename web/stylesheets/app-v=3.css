@@ -32,7 +32,7 @@ body {
 }
 
 input {
-	-webkit-appearance: none!important;
+	/*-webkit-appearance: none!important;*/
 	cursor:pointer
 }
 
@@ -57,7 +57,10 @@ a:hover {
 	margin-bottom: 20px;
 	max-width: 980px;
 }
+#wander {
+margin-left: 40%;
 
+}
 #destination a {
 	text-decoration:underline;
 	color:#fff;
@@ -144,10 +147,10 @@ height:30px;
 	font-family: "bebas";
 	font-size: 30px;
 	display: block;
-	float: left;
 	padding: 10px;
 	width: 200px;
-	margin: 10px;
+	margin: 0 auto;
+	margin-top: 10px;
 }
 
 #locationBar .submit:hover {
@@ -685,6 +688,10 @@ width: 440px;
 height: 50px;
 display: block;
 margin: 0 auto;
+}
+.submit{
+display: block;
+float: none;
 }
 #related
 {
