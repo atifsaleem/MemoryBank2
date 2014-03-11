@@ -48,10 +48,10 @@
         <div class="twelve columns">
           <form id="locationBar" title="many" action="javascript:codeAddress(this)">
             <div class="message">Or search by</div>            
-            <div id="locationInput" class="Input"><input id="location" placeholder="Location" type="text"> <input class="weights" id="locationWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)"></div>
-            <div id="dateInput" class="Input"><input type="date" id="datepicker" name='from' size='9' value="" />   <input class="weights" id="dateWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)"></div>
-            <div id="peopleInput" class="Input"><input id="people" placeholder="People" type="text">  <input class="weights" id="peopleWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)"></div>
-            <div id="emotionInput" class="Input"><input id="emotion" placeholder="Mood" type="text">  <input class="weights" id="moodWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="showValue(this.value)"></div>
+            <div id="locationInput" class="Input"><input id="location" placeholder="Location" type="text"> <input class="weights" id="locationWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="changeLabel(this);"><label id="locationWeightDisplay" for="locationWeight">50</label></div>
+            <div id="dateInput" class="Input"><input type="date" id="datepicker" name='from' size='9' value="" />   <input class="weights" id="dateWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="changeLabel(this);"><label id="dateWeightDisplay" for="dateWeight">50</label></div>
+            <div id="peopleInput" class="Input"><input id="people" placeholder="People" type="text">  <input class="weights" id="peopleWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="changeLabel(this);"><label id="peopleWeightDisplay" for="peopleWeight">50</label></div>
+            <div id="emotionInput" class="Input"><input id="emotion" placeholder="Mood" type="text">  <input class="weights" id="moodWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="changeLabel(this);"><label id="moodWeightDisplay" for="moodWeight">50</label></div>
             <div class="submitdiv">
             <input type="button" class="submit" title="one" value="FIND A MEMORY" onclick="javascript:codeAddress(this)">
             <input type="submit" class="submit" title="many" value="WANDER">
@@ -110,6 +110,11 @@ function tagCloud(elem)
 {
 jQuery("#"+elem.title).val(elem.id);
 codeAddress();
+}
+function changeLabel(elem)
+{
+var label=elem.id+"Display";
+document.getElementById(label).innerHTML = elem.value;  
 }
 </script>
 </body>
