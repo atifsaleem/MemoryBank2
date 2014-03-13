@@ -30,7 +30,7 @@
 <body background="images/bg.jpg" style="background-repeat: repeat-x">
 
 	<a  id="wait">Retrieving <span></span></a>
-      <div id="quicklinks" class="row" style="margin-top: 20px;">
+      <div id="quicklinks" class="row">
         <div class="iconrow">
         <div class="icon" title="people" id="friends" onclick="javascript:tagCloud(this)"><img src="images/friends-icon.png"><span class="caption">Friends</span></div>
         <div class="icon" title="people" id="colleagues" onclick="javascript:tagCloud(this)"><img src="images/colleagues-icon.png"><span class="caption">Colleagues</span></div>
@@ -52,6 +52,7 @@
             <div id="dateInput" class="Input"><input type="date" id="datepicker" name='from' size='9' value="" />   <input class="weights" id="dateWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="changeLabel(this);"><label id="dateWeightDisplay" for="dateWeight">50</label></div>
             <div id="peopleInput" class="Input"><input id="people" placeholder="People" type="text">  <input class="weights" id="peopleWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="changeLabel(this);"><label id="peopleWeightDisplay" for="peopleWeight">50</label></div>
             <div id="emotionInput" class="Input"><input id="emotion" placeholder="Mood" type="text">  <input class="weights" id="moodWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="changeLabel(this);"><label id="moodWeightDisplay" for="moodWeight">50</label></div>
+            <div id="activityInput" class="Input"><input id="activity" placeholder="Activity" type="text">  <input class="weights" id="activityWeight" type="range" name="points" id="points" value="50" min="0" max="100" onchange="changeLabel(this);"><label id="activityWeightDisplay" for="activityWeight">50</label></div>
             <div class="submitdiv">
             <input id="wander" type="checkbox" name="wander" value="wander" checked>Wander Mode 
 

@@ -62,12 +62,29 @@ jQuery(document).ready(function(){
       "family",
       "neighbors",
     ];
+    var availableActivities = [
+      "lunch",
+      "dinner",
+      "travel",
+      "picnic",
+      "shopping",
+      "night-out",
+      "sports",
+      "movies",
+      "work",
+      "chill",
+      "party"
+    ];
     jQuery( "#emotion" ).autocomplete({
       source: availableMoods
     });
     jQuery( "#people" ).autocomplete({
       source: availablePeople
     });
+     jQuery( "#activity" ).autocomplete({
+      source: availableActivities
+    });
+
 	document.body.style.background = "url('images/bg.jpg')";
 	var str = window.location.href;
 	var substr = str.split('?');
@@ -205,30 +222,36 @@ function chooseBar(results) {
 function showBar(playbackArray, k, oneormany) {
 
 	 curmemorynum=0;
+	 moodList=playbackArray[k].mood.split(',');
 	 //document.getElementById('myCanvasContainer').style.display = 'none';
 	 console.log("reached showbar");
 	 jQuery("#quicklinks").hide();
-	jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='#' title='VISIT THE WEBSITE'>" + playbackArray[k].location + "</a>")
+	jQuery("#destination").html("<a href='" + "" + "' target='#' title='VISIT THE WEBSITE'>" + playbackArray[k].location + "</a>")
 	jQuery("#related").css("visibility","visible");
 	document.getElementById('wtf').innerHTML="On "+playbackArray[k].date;
-	document.getElementById('wrong').innerHTML = "You were with "+playbackArray[k].people;
-	document.getElementById('shit').innerHTML = "You were "+playbackArray[k].mood;
+	document.getElementById('wrong').innerHTML = ""+playbackArray[k].people;
+	document.getElementById('shit').innerHTML = ""+moodList[0];
 	var pics;
 	audio = new Audio(music[playbackArray[k].mood.toLowerCase()]);
 	pics="<div onclick=\"javascript:playSlideshow(audio);\" id=\"playOverlay\" style=\"height: 480px; position: absolute; top: 0px; left: 0px; background-image: url('images/overlay.png'); z-index: 102; cursor: pointer;\"></div>";
 	pics += "<div id=\"slider\" onclick=\"javascript:playSlideshow(audio);\">";
+	var activity=document.getElementById("activity").value;
 	for (j=0;j<playbackArray.length;j++)
 	{
 	
 	var relatedBar = "<div class=\"related-divs\" id=\"related-"+playbackArray[j].location.replace(/\s+/g,'').replace(/\,/g,'')+"\"><span class=\"relatedimage\">"+"<img src=\""+playbackArray[j].path+"0.jpg\"></span><span class=\"relatedcaption\">"+playbackArray[j].location+"</span></div>"	
 	jQuery("#related").append(relatedBar);
+	var actlist = playbackArray[j].activity.split(',');
 	for (i=0;i<=playbackArray[j].num;i++)
 	{
-	pics+="<img width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
+	if (activity==actlist[i] || activity=="")
+	{
+	playbackArray[j].max=i;
+	pics+="<img title="+actlist[i]+" width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
+	}
 	}
 	}
 	pics+="</div>";
-	console.log(pics);
 	jQuery('div.related-divs').foggy();
 	jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
 	//jQuery("#map").html("<img src=\""+playbackArray[k].path+"/0.jpg\">");
@@ -237,15 +260,19 @@ function showBar(playbackArray, k, oneormany) {
 window.myFlux = new flux.slider('#slider', {
         autoplay: false,
         transitions: ['dissolve'],
+        captions: true,
+        delay: 6000,
         onTransitionEnd: function(data) {
         var img = data.currentImage;
         var cur = img.name;
-        if (img.name==playbackArray[curmemorynum].num)
- 		{	curmemorynum++;
+        if (img.name==playbackArray[curmemorynum].max)
+ 		{		 
+ 			curmemorynum++;
  			if (curmemorynum==playbackArray.length)
  				{curmemorynum=0;
  				 window.myFlux.next('turn');
  				}
+ 			moodList=playbackArray[curmemorynum].mood.split(',');
  			if (playbackArray[curmemorynum-1].mood != playbackArray[curmemorynum].mood)
 			{audio.pause();
 			audio = new Audio(music[playbackArray[curmemorynum].mood.toLowerCase()]);
@@ -255,10 +282,11 @@ window.myFlux = new flux.slider('#slider', {
  			jQuery('div.related-divs').foggy();
 			jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
 
- 			jQuery("#destination").html("YOU WERE AT <br/><a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[curmemorynum].location + "</a>")
+ 			jQuery("#destination").html("<a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[curmemorynum].location + "</a>")
  			jQuery("#address").html(playbackArray[curmemorynum].location);
 			document.getElementById('wtf').innerHTML="On "+playbackArray[curmemorynum].date;
-			document.getElementById('wrong').innerHTML = "You were with "+playbackArray[curmemorynum].people;
+			document.getElementById('wrong').innerHTML = ""+playbackArray[curmemorynum].people;
+			//document.getElementById('shit').innerHTML = ""+moodList[img.name];
  		}
             }
     );
@@ -311,6 +339,8 @@ function codeAddress(elem) {
 	var peopleWeight = document.getElementById("peopleWeight").value;
 	var mood = document.getElementById("emotion").value;
 	var moodWeight = document.getElementById("moodWeight").value;
+	var activity = document.getElementById("activity").value;
+	var activityWeight = document.getElementById("activityWeight").value;
 	var playbackArray = new Array();
 	var index=0;
 	var score=0;
@@ -332,7 +362,7 @@ function codeAddress(elem) {
 	else score++;
 	}
 
-	if(memories[i].people.toLowerCase().indexOf(people) != -1 && people != "")
+	if(memories[i].people.toLowerCase().indexOf(people.toLowerCase()) != -1 && people != "")
 	{	
 		console.log(people.toLowerCase()+"-"+memories[i].people.toLowerCase());
 
@@ -340,13 +370,26 @@ function codeAddress(elem) {
 	score+=2;
 	else score++;
 	}
-	if(mood.toLowerCase()==memories[i].mood.toLowerCase() && mood!="")
+	if(memories[i].mood.toLowerCase().indexOf(mood.toLowerCase()) && mood!="")
 	{
 	console.log(mood.toLowerCase()+"-"+memories[i].mood.toLowerCase());
 	if (moodWeight>=50)
 	score+=2;
 	else score++;
 	}
+	if(memories[i].activity.toLowerCase().indexOf(activity.toLowerCase()) != -1 && activity != "")
+	{	
+		//console.log(activity.toLowerCase()+"-"+memories[i].activity.toLowerCase());
+	if (activityWeight>=50)
+	score+=2;
+	else score++;
+	}
+
+	if(memories[i].activity.toLowerCase().indexOf(activity) == -1 && activity != "")
+	{
+	score=0;
+	}
+
 	if (score>greatestScore)
 	{ greatestScore = score;
 	if (index!=0)
