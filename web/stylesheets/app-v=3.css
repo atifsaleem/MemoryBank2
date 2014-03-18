@@ -25,10 +25,10 @@ body {
 	padding-top: 40px;
 	*/
 	position: relative;
-	background: url('images/bg.jpg');
+	background: url('images/memories.jpg');
 	background-color: #005A93;
 	background-repeat: repeat;
-	overflow-y: none;
+	overflow-y: hidden;
 }
 
 input {
@@ -41,31 +41,43 @@ label
 	float: left;
 display: block;
 margin-top: 2%;
+color: black;
 }
 a:hover {
 	color:#00aba6 !important
 }
 
+#form-wrapper {
+width: 50%;
+height: 650px;
+min-width: 600px;
+margin: 0 auto;	
+background-color:rgba(255,255,255,0.7);
+border-radius: 20px;
+}
 #destination {
 	font-size:40px;
 	text-transform:uppercase;
 	display:block;
 	text-align:center;
 	margin:auto;
-	background: black;
+	background: #000;
 	color: #fff;
 	margin-bottom: 20px;
 	max-width: 980px;
+	opacity: 0.9;
+	border-radius: 20px;
 }
 #wander {
-margin-left: 40%;
 
 }
 #destination a {
 	text-decoration:underline;
 	color:#fff;
 }
-
+#locate {
+margin-top: 40px;
+}
 #locationBar {
 	opacity:0.2
 }
@@ -79,78 +91,74 @@ text-align: center;
 margin: 0 auto;
 width: 800px;
 padding: 10px;
-height: 40px;
+height: 25px;
+
 }
 #location {
 font-family: "bebas";
-font-size: 30px;
-color: #ccc;
-margin-left: 20%;
+font-size: 20px;
+color: #000;
 text-align: left;
-width: 60%;
-border-radius: 0;
-border: 1px solid #000;
+width: 30%;
+border-radius: 10px;border: 1px solid #000;
 padding: 5px;
+margin-left: 20%;
 margin-right: 20px;
 float:left;
-height:30px;
+height:20px;
 }
 #emotion {
 font-family: "bebas";
-font-size: 30px;
-color: #ccc;
-margin-left: 20%;
+font-size: 20px;
+color: #000;
 text-align: left;
-width: 60%;
-border-radius: 0;
-border: 1px solid #000;
+width: 30%;
+margin-left: 20%;
+border-radius: 10px;border: 1px solid #000;
 padding: 5px;
 margin-right: 20px;
 float:left;
-height:30px;
+height:20px;
 }
 #activity {
 font-family: "bebas";
-font-size: 30px;
-color: #ccc;
-margin-left: 20%;
+font-size: 20px;
+color: #000;
 text-align: left;
-width: 60%;
-border-radius: 0;
-border: 1px solid #000;
+width: 30%;
+margin-left: 20%;
+border-radius: 10px;border: 1px solid #000;
 padding: 5px;
 margin-right: 20px;
 float:left;
-height:30px;
+height:20px;
 }
 
 #people {
 font-family: "bebas";
-font-size: 30px;
-color: #ccc;
-margin-left: 20%;
+font-size: 20px;
+color: #000;
 text-align: left;
-width: 60%;
-border-radius: 0;
-border: 1px solid #000;
+width: 30%;
+margin-left: 20%;
+border-radius: 10px;border: 1px solid #000;
 padding: 5px;
 margin-right: 20px;
 float:left;
-height:30px;
+height:20px;
 }
 #datepicker {
 font-family: "bebas";
-font-size: 30px;
+font-size: 20px;
 color: #ccc;
-margin-left: 20%;
 text-align: left;
-width: 60%;
-border-radius: 0;
-border: 1px solid #000;
+width: 30%;
+margin-left: 20%;
+border-radius: 10px;border: 1px solid #000;
 padding: 5px;
 margin-right: 20px;
 float:left;
-height:30px;
+height:20px;
 }
 
 #locationBar .submit {
@@ -160,16 +168,18 @@ height:30px;
 	color: #808080;
 	display: block;
 	font-family: "bebas";
-	font-size: 30px;
+	font-size: 20px;
 	display: block;
 	padding: 10px;
-	width: 200px;
-	margin: 0 auto;
+	width: 120px;
 	margin-top: 10px;
+	border-radius: 10px;
 }
 
 #locationBar .submit:hover {
-	background-color:#00aba6 !important
+	background-color:#00aba6 !important;
+	color: white;
+
 }
 #locationBar .button {
 	
@@ -187,7 +197,8 @@ height:30px;
 }
 
 #locationBar .button:hover {
-	background-color:#00aba6 !important
+	background-color:#00aba6 !important;
+	color:white;
 }
 #location:focus {
 	color:#000;
@@ -206,10 +217,8 @@ height:30px;
 .message{
 	text-align:center;
 	font-size:35px;
-	margin-top: 30px;
-	margin-bottom:20px;
-	color:white;
-
+	color:black;
+	margin-top: -40px;
 }
 
 #mapcontainer {
@@ -225,11 +234,13 @@ height:30px;
 	min-width: 100%;
 	background: #fff !important;
 	overflow:hidden;
+	margin-top: 40px;
+	border-radius: 20px;
 }
 
 #address {
 	visibility: hidden;
-	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
 	bottom: 0;
 	font-size: 32px;
 	height: 380px;
@@ -303,12 +314,13 @@ height: 400px;
 	font-size: 50px;
 	height: 100%;
 	padding-top: 260px;
-	position: absolute;
+	position: fixed;
 	text-align: center;
 	top: 0;
 	width: 100%;
-	z-index: 2000;
+	z-index: 10000;
 	height: 100%;
+	margin-top:-20px;
 }
 
 #wait:hover {
@@ -510,6 +522,7 @@ color:#fff;
 	
 	#destination {
 		font-size:30px;
+		border-radius: 20px;
 	}
 	
 	#wait {
@@ -664,8 +677,8 @@ color:#fff;
 }
 .weights {
 float: left;
-margin-top: 1.7%;
-width: 40px;
+margin-top: 1.2%;
+width: 30px;
     -webkit-transform:rotate(270deg); /* Safari and Chrome */        
     -moz-transform:rotate(270deg);
     -o-transform:rotate(270deg);
@@ -688,34 +701,54 @@ cursor: pointer;
 display: block;
 float: left;
 text-align: center;
-width: 64px;
-height: 80px;
+width: 96px;
+height: 112px;
 margin-left: 20px;
 margin-right:20px;
 cursor: pointer;
+}
+.icon img {
+min-width: 96px;
+height:96px;	
 }
 .caption{
 display: block;
 text-align: center;
 padding-top: 5px;
+color: black;
+font-size: 20px;
+}
+#related .caption {
 color: white;
 }
 .iconrow{
-height:80px;
-width: 416px;
+height:112px;
+width: 544px;
 display: block;
 margin: 0 auto;
 padding-top: 20px;
+padding-bottom:20px;
 }
 .submitdiv{
 width: 440px;
 height: 50px;
 display: block;
 margin: 0 auto;
+text-align: center;
+margin-top: 10px;
 }
-.submit{
-display: block;
-float: none;
+#submit-wrapper{
+	display: inline-block;
+	width: 120px;
+	margin: 0 auto;
+	margin-left:10px;
+}
+#wander-wrapper{
+	display: inline-block;
+	margin-top: 10px;
+	margin-left: 10px;
+	padding-top: 10px;
+	color:#000;
 }
 #related
 {
@@ -728,10 +761,17 @@ overflow-y: scroll;
 }
 #related div {
 padding-bottom: 20px;
+border-radius: 20px;
+}
+.relatedimage img {
+border-radius: 20px;
 }
 .relatedcaption{
 	display: block;
 	text-align: center;
+	background: #000;
+	color: #fff;
+	border-radius: 20px;
 }
 @media only screen and (max-width: 1200px) {
     #related{display:none;}
@@ -756,3 +796,6 @@ border: 1px solid #000;
 float:left;
 }
 .ui-helper-hidden-accessible { display:none; }
+#logo {width: 100px; height: 32px;}
+#logo img {height: 54px; width: 54px; }
+#logotext { display:inline-block; vertical-align:middle; line-height:54px; font-size: 32px;position: absolute; padding-left: 5px;} 

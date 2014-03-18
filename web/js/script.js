@@ -84,8 +84,9 @@ jQuery(document).ready(function(){
      jQuery( "#activity" ).autocomplete({
       source: availableActivities
     });
-
-	document.body.style.background = "url('images/bg.jpg')";
+     jQuery();
+	//document.body.style.background = "url('images/bg.jpg')";
+	jQuery.backstretch("images/garfield-interior.jpg");
 	var str = window.location.href;
 	var substr = str.split('?');
 	if(substr[1] == "where"){			
@@ -225,17 +226,24 @@ function showBar(playbackArray, k, oneormany) {
 	 moodList=playbackArray[k].mood.split(',');
 	 //document.getElementById('myCanvasContainer').style.display = 'none';
 	 console.log("reached showbar");
-	 jQuery("#quicklinks").hide();
-	jQuery("#destination").html("<a href='" + "" + "' target='#' title='VISIT THE WEBSITE'>" + playbackArray[k].location + "</a>")
+	 jQuery("#form-wrapper").hide();
+	 locMin = playbackArray[k].location.split(',');
+	jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[k].people+" on "+playbackArray[k].date);
 	jQuery("#related").css("visibility","visible");
-	document.getElementById('wtf').innerHTML="On "+playbackArray[k].date;
-	document.getElementById('wrong').innerHTML = ""+playbackArray[k].people;
-	document.getElementById('shit').innerHTML = ""+moodList[0];
+	//document.getElementById('wtf').innerHTML="On "+playbackArray[k].date;
+	//document.getElementById('wrong').innerHTML = ""+playbackArray[k].people;
+	//document.getElementById('shit').innerHTML = ""+moodList[0];
 	var pics;
 	audio = new Audio(music[playbackArray[k].mood.toLowerCase()]);
 	pics="<div onclick=\"javascript:playSlideshow(audio);\" id=\"playOverlay\" style=\"height: 480px; position: absolute; top: 0px; left: 0px; background-image: url('images/overlay.png'); z-index: 102; cursor: pointer;\"></div>";
 	pics += "<div id=\"slider\" onclick=\"javascript:playSlideshow(audio);\">";
 	var activity=document.getElementById("activity").value;
+
+	if (activity!="")
+	{
+	pics+="<img title=\"cover-photo\" name=-1 src=\"http://placehold.it/980x500&text=memories+of+"+activity+"\">";
+	}
+
 	for (j=0;j<playbackArray.length;j++)
 	{
 	
@@ -246,6 +254,7 @@ function showBar(playbackArray, k, oneormany) {
 	{
 	if (activity==actlist[i] || activity=="")
 	{
+	console.log("oldmax:"+playbackArray[j].max+" newmax: "+i);
 	playbackArray[j].max=i;
 	pics+="<img title="+actlist[i]+" width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
 	}
@@ -260,12 +269,13 @@ function showBar(playbackArray, k, oneormany) {
 window.myFlux = new flux.slider('#slider', {
         autoplay: false,
         transitions: ['dissolve'],
-        captions: true,
-        delay: 6000,
+        delay: 4000,
         onTransitionEnd: function(data) {
         var img = data.currentImage;
         var cur = img.name;
-        if (img.name==playbackArray[curmemorynum].max)
+        final=false;
+        console.log("currentimage: "+img.name+"-curmemmax: "+playbackArray[curmemorynum].max+" curmem:"+curmemorynum);
+        if (img.name==playbackArray[curmemorynum].max || img.name==-1)
  		{		 
  			curmemorynum++;
  			if (curmemorynum==playbackArray.length)
@@ -276,17 +286,18 @@ window.myFlux = new flux.slider('#slider', {
  			if (playbackArray[curmemorynum-1].mood != playbackArray[curmemorynum].mood)
 			{audio.pause();
 			audio = new Audio(music[playbackArray[curmemorynum].mood.toLowerCase()]);
-			audio.play();}
+			audio.play();}			
 			window.myFlux.next('turn');
+			
 		}
- 			jQuery('div.related-divs').foggy();
-			jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
-
- 			jQuery("#destination").html("<a href='" + "" + "' target='_blank' title='VISIT THE WEBSITE'>" + playbackArray[curmemorynum].location + "</a>")
- 			jQuery("#address").html(playbackArray[curmemorynum].location);
-			document.getElementById('wtf').innerHTML="On "+playbackArray[curmemorynum].date;
-			document.getElementById('wrong').innerHTML = ""+playbackArray[curmemorynum].people;
 			//document.getElementById('shit').innerHTML = ""+moodList[img.name];
+			 				jQuery('div.related-divs').foggy();
+				jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
+				locMin = playbackArray[curmemorynum].location.split(',');
+				jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[curmemorynum].people+" on "+playbackArray[curmemorynum].date);
+ 				jQuery("#address").html(playbackArray[curmemorynum].location);
+ 				
+
  		}
             }
     );
@@ -296,14 +307,13 @@ window.myFlux = new flux.slider('#slider', {
 		
 		
 		jQuery("#address").html(playbackArray[0].location);
-				$wait.delay(500).fadeOut("slow",function(){
+				$wait.fadeOut("slow",function(){
 				document.getElementById("map").style.visibility="visible";
 				document.getElementById("address").style.visibility="visible";
 				jQuery("#actions, #about, #recommendation, .ad").fadeIn(updateDate());
 				});
 		//updateDate();
 	}
-
 
 
 //get directions
