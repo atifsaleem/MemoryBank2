@@ -1,66 +1,51 @@
-var resultref;
-var marker;
-var thismemory;
-var markersArray = [];
-var shitCounter = 0;
-var iteration = 0;
-var drinkIcon = 'images/food.png';
-var homeIcon = 'images/home.png';
-var resultsStore;
-var totalResults =[];
-var pubResultsStore;
-var barResultsStore;
-var userLoc;
-var currentlatlng;
 var path;
 var musicpath;
 var index;
 var curmemorynum=0;
-/*
-var dates = new Array("Monday - 25 January 2010", "Wednesday - 10 February 2010", "Thursday - 10 June 2010", "Thursday - 9 September 2010", "Tuesday - 5 October 2010", "Tuesday - 2 November 2010", "Tuesday - 5 April 2011", "Friday - 8 April 2011", "Tuesday - 26 July 2011", "Tuesday - 6 September 2011", "Tuesday - 13 September 2011", "Monday - 10 October 2011", "Friday - 8 June 2012", "Friday - 14 December 2012", "Thursday - 27 December 2012", "Monday - 7 January 2013", "Monday - 8 April 2013", "Monday, 1 July 2013", "Tuesday - 6 August 2013", "Friday - 11 October 2013","Tuesday - 25th December 2012");
-var people = new Array("Friends","Family","Acquaintances","Colleagues","Classmates","Relatives","Neighbors");
-var locations = new Array("Miami Beach, FL, United States","Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States","Fort Canning Park Singapore","Arab Street Singapore","Dubai - United Arab Emirates","Phnom Penh, Cambodia","Fujairah - United Arab Emirates","Cold Spring, NY, United States");
-var videos = new Array("http://www.youtube.com/embed/watch?v=-zmx0kScUss","http://www.youtube.com/embed/watch?v=Ik-sFkQqKD8;autoplay=1","http://www.youtube.com/embed/watch?v=zw2a64fp3No&iframe;autoplay=1","http://youtube.com/embed/watch?v=0xDNuWX5nUA?t=5s;autoplay=1","http://www.youtube.com/embed/watch?v=wOSci-rWf2Q;autoplay=1");
-var memories = new Array("images/photos/Memory1/","images/photos/Memory2/","images/photos/Memory3/","images/photos/Memory4/","images/photos/Memory5/","images/photos/Memory6/resized/","images/photos/Memory7/","images/photos/Memory8/");
-*/
+var prevmemorynum=0;
+var final=false;
+var activityToVerb;
+var wordToPlural;
 var music = {'pleased':"music/island.m4a",'excited':"music/peach.m4a",'content':"music/swing.m4a",'aroused':"music/bbq.m4a",'sleepy':"music/lazyday.m4a",'depressed':"music/minuet.mp3",'miserable':"music/acoustic.m4a",'distressed':"music/acoustic.m4a",'neutral':"music/acoustic.m4a"};
 
 $wait = jQuery('#wait');
-$locationBar = jQuery('#locationBar')
-//map stuff
-//
-//declare b&w google maps
-
-//set map options
-function updateDate()
-
-{
-
-}
-//create map
-//other map stuff
+$locationBar = jQuery('#locationBar');
 
 
-//kick shit off 
 jQuery(document).ready(function(){
-	//detect string  to trigger manual location entry
-	   var availableMoods = [
-      "pleased",
+	  var availableLocations = [
+      "Miami Beach, FL, United States",
+      "Universal Studios Orlando, Universal Boulevard, Orlando, FL, United States",
+      "Fort Canning Park Singapore",
+      "Arab Street Singapore",
+      "Dubai - United Arab Emirates",
+      "Phnom Penh, Cambodia",
+      "Fujairah - United Arab Emirates",
+      "Cold Spring, NY, United States",
+      "Jurong West, Singapore",
+      "Jurong West Community Hall, Singapore",
+      "Hougang, Singapore",
+      "Bugis, Singapore",
+      "Nanyang Technological University, Singapore",
+      "Holland Village, Singapore",
+      "Toh Payoh, Singapore",
+      "Jurong West Church, Singapore",
+      "Macritchie Reservoir, Singapore",
+      "Botanical Gardens, Singapore",
+      "Raffles Place, Singapore",
+      "Changi Business Park, Singapore"
+     ];
+	  var availableMoods = [
+      "happy",
+      "sad",
       "excited",
-      "content",
-      "aroused",
-      "sleepy",
-      "depressed",
-      "miserable",
-      "distressed",
-      "neutral",
     ];
     var availablePeople = [
       "friends",
       "acquaintances",
       "classmates",
       "family",
-      "neighbors",
+      "neighbours",
     ];
     var availableActivities = [
       "lunch",
@@ -68,273 +53,166 @@ jQuery(document).ready(function(){
       "travel",
       "picnic",
       "shopping",
-      "night-out",
+      "nightout",
       "sports",
-      "movies",
       "work",
-      "chill",
-      "party"
+      "gathering",
+      "party",
+      "wedding"
     ];
+    activityToVerb = {
+    lunch:'having lunch',
+    dinner:'having dinner',
+    travel:'travelling',
+    picnic:'on a picnic',
+    shopping:'shopping',
+    nightout:'on a night-out',
+    sports:'playing sports',
+    work:'at work',
+    gathering:'at a gathering',
+    party:'at a party',
+    wedding:'at a wedding'
+    };
+    wordToPlural = {
+    lunch:'lunches',
+    dinner:'dinners',
+    travel:'travels',
+    picnic:'picnics',
+    shopping:'shopping',
+    nightout:'nightouts',
+    sports:'playing sports',
+    work:'work',
+    gathering:'gatherings',
+    party:'parties',
+    wedding:'weddings'
+    };
+
     jQuery( "#emotion" ).autocomplete({
       source: availableMoods
     });
+        jQuery( "#emotion" ).autocomplete({
+      source: availableMoods
+    });
+
     jQuery( "#people" ).autocomplete({
       source: availablePeople
     });
      jQuery( "#activity" ).autocomplete({
       source: availableActivities
     });
-     jQuery();
+     jQuery( "#location" ).autocomplete({
+      source: availableLocations
+    });
 	//document.body.style.background = "url('images/bg.jpg')";
 	jQuery.backstretch("images/garfield-interior.jpg");
-	var str = window.location.href;
-	var substr = str.split('?');
-	if(substr[1] == "where"){			
-		$locationBar.css("opacity",1);
-		console.log ("manual location entry")
-		
-	}
-	//otherwise trigger browser geolocation
-	else{getLocation();}
 });
 
-//if browser has geolocation then get current location
-function getLocation() {
-	if (Modernizr.geolocation) {
-		navigator.geolocation.getCurrentPosition(currentLocation, handle_error,   {timeout:10000});
-		console.log ("browser has geolocation")
-		}
-	else {
-		//trigger manual entry if no geolocation
-		console.log("browser has geolocation");
-		$locationBar.fadeIn();
-	}
-}
-
-//if geolocation error trigger manual entry
-function handle_error(err) {
-	$locationBar.css("opacity",1);
-	showError("Hi Atif, what do you want to see today?");
-	console.log ("can't find location")
-	if (err.code == 0) {
-		console.log("unknown")
-	}
-	if (err.code == 1) {
-		console.log("denied")
-	}
-	if (err.code == 2) {
-		console.log("unreliable")
-	}
-	if (err.code == 3) {
-		console.log("taking ages")
-	}
-}
-
-//get current location
-function currentLocation(position){
-	$wait.fadeIn(function(){
-		jQuery("#locationBar").fadeOut();
-		var latitude = position.coords.latitude;
-		var longitude = position.coords.longitude;
-		currentlatlng = new google.maps.LatLng(latitude, longitude);
-		console.log ("current position is: " + currentlatlng);
-		//reverse geocode
-		geocoder = new google.maps.Geocoder();
-		geocoder.geocode({'latLng': currentlatlng}, function(results, status) {
-      		if (status == google.maps.GeocoderStatus.OK) {
-        		if (results[1]) {
-					formattedAddress = results[1].formatted_address;
-					console.log(formattedAddress);
-					if (formattedAddress.indexOf("USA") !=-1) {
-						console.log("in the USA");
-						jQuery("#omnom").show();
-					}
-          		}
-      		}
-			else {
-
-        	console.log("Geocoder failed due to: " + status);
-      		}
-    	});
-
-		getPlaces(currentlatlng);
-	});
-	
-}
-
-//set home position and request for bars
-function getPlaces(currentlatlng) {
-	userLoc = currentlatlng;
-	homeMarker = new google.maps.Marker({
-		map: map,
-		animation: google.maps.Animation.DROP,
-		position:currentlatlng,
-		icon:homeIcon
-		});
-	var requestBar = {
-		location: currentlatlng,
-		radius: 1000,
-		keyword: "restaurant"
-		};
-	service.search(requestBar, storeRequestBar);
-}
-
-//store the results for bars then call for pubs
-function storeRequestBar(request) {
-	//if (status == google.maps.places.PlacesServiceStatus.OK)
-	barResultsStore = request;
-	var requestPub = {
-	location: currentlatlng,
-	radius: 1000,
-	types: "restaurant"
-	};
-	service.search(requestPub, storeRequestPub);
-}
-
-//store the results for pubs & combine
-function storeRequestPub(request) {
-	if (status == google.maps.places.PlacesServiceStatus.OK)
-	pubResultsStore = request;
-	//combine pubs & bars into one array
-	totalResults = barResultsStore.concat(pubResultsStore)
-	console.log("there are " + totalResults.length + "pubs & bars")
-	//remove duplicate results
-	resultsStore = removeDupes(totalResults, 'id');
-	//randomise results
-	resultsStore = resultsStore.sort(function(a, b){
-		return Math.random() - 0.5
-		});	
-	for (i=0;i<resultsStore.length;i++) {
-		console.log(resultsStore[i].name)
-		}
-	if (resultsStore == 0) {
-		showError("can't find shit there. try somewhere else");
-		} 
-	chooseBar(resultsStore);	
-}
-
-//choose a bar 
-function chooseBar(results) {
-	barRef = {reference: results[shitCounter].reference}
-	service.getDetails(barRef, showBar);
-}
-
-//show bar details
 function showBar(playbackArray, k, oneormany) {
-
-	 curmemorynum=0;
-	 moodList=playbackArray[k].mood.split(',');
-	 //document.getElementById('myCanvasContainer').style.display = 'none';
-	 console.log("reached showbar");
-	 jQuery("#form-wrapper").hide();
-	 locMin = playbackArray[k].location.split(',');
-	jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[k].people+" on "+playbackArray[k].date);
-	jQuery("#related").css("visibility","visible");
-	//document.getElementById('wtf').innerHTML="On "+playbackArray[k].date;
-	//document.getElementById('wrong').innerHTML = ""+playbackArray[k].people;
-	//document.getElementById('shit').innerHTML = ""+moodList[0];
+	curmemorynum=0;
+	moodList=playbackArray[k].mood.split(',');
+	jQuery("#form-wrapper").hide();
+	locMin = playbackArray[k].location.split(',');
 	var pics;
 	audio = new Audio(music[playbackArray[k].mood.toLowerCase()]);
 	pics="<div onclick=\"javascript:playSlideshow(audio);\" id=\"playOverlay\" style=\"height: 480px; position: absolute; top: 0px; left: 0px; background-image: url('images/overlay.png'); z-index: 102; cursor: pointer;\"></div>";
-	pics += "<div id=\"slider\" onclick=\"javascript:playSlideshow(audio);\">";
+	pics += "<div id=\"slider\" class='no-flick' onclick=\"javascript:playSlideshow(audio);\">";
 	var activity=document.getElementById("activity").value;
-
 	if (activity!="")
 	{
-	pics+="<img title=\"cover-photo\" name=-1 src=\"http://placehold.it/980x500&text=memories+of+"+activity+"\">";
+	pics+="<img name=-1 src=\"http://placehold.it/980x500&text=memories+of+"+wordToPlural[activity]+"\">";
 	}
-
-	for (j=0;j<playbackArray.length;j++)
+	jQuery('#slider').css({
+	'position':'relative',
+	'background':'url(images/loading.gif) no-repeat 50% 50%',
+	'z-index':'1',
+	'-webkit-transform': 'translateZ(0)',
+	'-webkit-backface-visibility':'hidden'
+	});
+	if (oneormany==1)
+		loopMax=1;
+	else
+		loopMax=playbackArray.length;
+	for (j=0;j<loopMax;j++)
 	{
 	
-	var relatedBar = "<div class=\"related-divs\" id=\"related-"+playbackArray[j].location.replace(/\s+/g,'').replace(/\,/g,'')+"\"><span class=\"relatedimage\">"+"<img src=\""+playbackArray[j].path+"0.jpg\"></span><span class=\"relatedcaption\">"+playbackArray[j].location+"</span></div>"	
-	jQuery("#related").append(relatedBar);
-	var actlist = playbackArray[j].activity.split(',');
-	for (i=0;i<=playbackArray[j].num;i++)
-	{
-	if (activity==actlist[i] || activity=="")
-	{
-	console.log("oldmax:"+playbackArray[j].max+" newmax: "+i);
-	playbackArray[j].max=i;
-	pics+="<img title="+actlist[i]+" width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
-	}
-	}
+		var relatedBar = "<div class=\"related-divs\" id=\"related-"+playbackArray[j].location.replace(/\s+/g,'').replace(/\,/g,'')+"\"><span class=\"relatedimage\">"+"<img src=\""+playbackArray[j].path+"0.jpg\"></span><span class=\"relatedcaption\">"+playbackArray[j].location+"</span></div>"	
+		jQuery("#related").append(relatedBar);
+		var actlist = playbackArray[j].activity.split(',');
+		var moodlist = playbackArray[j].mood.split(',');
+		for (i=0;i<=playbackArray[j].num;i++)
+			{
+				if (activity==actlist[i] || activity=="")
+					{
+					playbackArray[j].max=i;
+					if (actlist[i]!='-')
+						{
+						if (moodlist[i]!='-')
+						pics+="<img title=\""+activityToVerb[actlist[i]]+". Feeling "+moodlist[i]+"\" width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
+						else
+						pics+="<img title=\""+activityToVerb[actlist[i]]+"\" width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
+						}	
+	
+					else
+						{
+						if (moodlist[i]!='-')
+						pics+="<img title=\"Feeling "+moodlist[i]+"\" width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
+						else
+						pics+="<img width=980px height=400px name="+i+" src=\""+playbackArray[j].path+i+".jpg\" alt=\"\" />";
+						}
+					}
+			}
 	}
 	pics+="</div>";
 	jQuery('div.related-divs').foggy();
 	jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
 	//jQuery("#map").html("<img src=\""+playbackArray[k].path+"/0.jpg\">");
 	jQuery("#map").html(pics);
-
-window.myFlux = new flux.slider('#slider', {
+	window.myFlux = new flux.slider('#slider',{
         autoplay: false,
         transitions: ['dissolve'],
+        captions: true,
         delay: 4000,
         onTransitionEnd: function(data) {
         var img = data.currentImage;
         var cur = img.name;
         final=false;
-        console.log("currentimage: "+img.name+"-curmemmax: "+playbackArray[curmemorynum].max+" curmem:"+curmemorynum);
-        if (img.name==playbackArray[curmemorynum].max || img.name==-1)
- 		{		 
+        if (img.name==playbackArray[curmemorynum].max && img.name!=-1)
+ 		{	prevmemorynum=curmemorynum;	 
  			curmemorynum++;
+ 			final=true;
+ 			if (img.name==-1)
+ 				{curmemorynum=0;
+ 				}
  			if (curmemorynum==playbackArray.length)
  				{curmemorynum=0;
- 				 window.myFlux.next('turn');
  				}
- 			moodList=playbackArray[curmemorynum].mood.split(',');
- 			if (playbackArray[curmemorynum-1].mood != playbackArray[curmemorynum].mood)
+ 			moodListtemp=playbackArray[curmemorynum].mood.split(',');
+ 			if (playbackArray[prevmemorynum].mood != playbackArray[curmemorynum].mood)
 			{audio.pause();
 			audio = new Audio(music[playbackArray[curmemorynum].mood.toLowerCase()]);
-			audio.play();}			
-			window.myFlux.next('turn');
-			
+			audio.play();}
+			jQuery("#destination").fadeOut('slow');
 		}
-			//document.getElementById('shit').innerHTML = ""+moodList[img.name];
-			 				jQuery('div.related-divs').foggy();
-				jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
-				locMin = playbackArray[curmemorynum].location.split(',');
-				jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[curmemorynum].people+" on "+playbackArray[curmemorynum].date);
- 				jQuery("#address").html(playbackArray[curmemorynum].location);
- 				
+		if(img.name!=playbackArray[curmemorynum].max && !final)
+		{
+			jQuery('div.related-divs').foggy();
+			jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
+			locMin = playbackArray[curmemorynum].location.split(',');
+			jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[curmemorynum].people+" on "+playbackArray[curmemorynum].date);
+ 			jQuery("#destination").fadeIn('slow');
+		}
 
- 		}
-            }
-    );
-
-
-		console.log("reached showbar2");
-		
-		
-		jQuery("#address").html(playbackArray[0].location);
-				$wait.fadeOut("slow",function(){
-				document.getElementById("map").style.visibility="visible";
-				document.getElementById("address").style.visibility="visible";
-				jQuery("#actions, #about, #recommendation, .ad").fadeIn(updateDate());
-				});
-		//updateDate();
 	}
+	});
 
-
-//get directions
-var directionsDisplay =  new google.maps.DirectionsRenderer();
-var directionsService = new google.maps.DirectionsService();
-function calcRoute(start, end) {
-  	var request = {
-    	origin:start,
-    	destination:end,
-    	travelMode: google.maps.TravelMode.WALKING
-  	};
-	directionsService.route(request, function(result, status) {
-    	if (status == google.maps.DirectionsStatus.OK) {
-      		directionsDisplay.setDirections(result);
-			//strokeColor
-    	}
-  	});
+	$wait.fadeOut("slow",function(){
+	document.getElementById("map").style.visibility="visible";
+	jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[k].people+" on "+playbackArray[k].date);
+	jQuery("#related").css("visibility","visible");
+	});
 }
 
- 
-//manual geolocation
+
 function codeAddress(elem) {
 
     //document.body.style.background = "";
@@ -351,55 +229,61 @@ function codeAddress(elem) {
 	var moodWeight = document.getElementById("moodWeight").value;
 	var activity = document.getElementById("activity").value;
 	var activityWeight = document.getElementById("activityWeight").value;
+	if (date=="")
+		dateWeight=0;
+	if (people=="")
+		peopleWeight=0;
+	if (mood=="")
+		moodWeight=0;
+	if (activity=="")
+		activityWeight=0;
 	var playbackArray = new Array();
 	var index=0;
 	var score=0;
 	var greatestScore=0;
 	for (i = 0; i < memories.length; ++i) {	
     if(location.toLowerCase()==memories[i].location.toLowerCase())
-	{		console.log(location.toLowerCase()+"-"+memories[i].location.toLowerCase());
+	{		
 
-	if (locationWeight>=50)
-	score+=2;
-	else score++;
+	score+=parseInt(locationWeight);
+	//console.log("Score of "+memories[i].location+"after loc is "+score);
 	}
-	if(date==memories[i].date)
+	if(memories[i].date.toLowerCase().indexOf(date.toLowerCase()) != -1 && date != "")
 	{
-			console.log(date.toLowerCase()+"-"+memories[i].date.toLowerCase());
 
-	if (dateWeight>=50)
-	score+=2;
-	else score++;
+	score+=parseInt(dateWeight);
+	//	console.log("Score of "+memories[i].location+"after date is "+score);
+
 	}
 
 	if(memories[i].people.toLowerCase().indexOf(people.toLowerCase()) != -1 && people != "")
 	{	
-		console.log(people.toLowerCase()+"-"+memories[i].people.toLowerCase());
 
-	if (peopleWeight>=50)
-	score+=2;
-	else score++;
+	score+=parseInt(peopleWeight);
+	//	console.log("Score of "+memories[i].location+"after people is "+score);
+
 	}
-	if(memories[i].mood.toLowerCase().indexOf(mood.toLowerCase()) && mood!="")
+	if(memories[i].mood.toLowerCase().indexOf(mood.toLowerCase())!=-1 && mood!="")
 	{
-	console.log(mood.toLowerCase()+"-"+memories[i].mood.toLowerCase());
-	if (moodWeight>=50)
-	score+=2;
-	else score++;
+	
+	score+=parseInt(moodWeight);
+	console.log("Score of "+memories[i].location+"after mood is "+score);
+
 	}
 	if(memories[i].activity.toLowerCase().indexOf(activity.toLowerCase()) != -1 && activity != "")
 	{	
 		//console.log(activity.toLowerCase()+"-"+memories[i].activity.toLowerCase());
-	if (activityWeight>=50)
-	score+=2;
-	else score++;
+		score+=parseInt(activityWeight);
+		console.log("Score of "+memories[i].location+"after activity is "+score);
+
 	}
 
 	if(memories[i].activity.toLowerCase().indexOf(activity) == -1 && activity != "")
 	{
+	console.log('activity is: '+activity);
 	score=0;
 	}
-
+	//console.log("Score of "+memories[i].location+" is "+score);
 	if (score>greatestScore)
 	{ greatestScore = score;
 	if (index!=0)
@@ -409,92 +293,35 @@ function codeAddress(elem) {
 	playbackArray[index]=temp;
 	score=0;
 	}
-	else {playbackArray[0]=memories[i]}
+	else {playbackArray[0]=memories[i];score=0
 	index++;
 	continue;
 	}
-	if (score>=1)
+	}
+	if (score>0)
 	{
 	playbackArray[index]=memories[i];
 	index++;
 	}
 	score=0;
+
 	}
-	console.log("reached end of codeAddress");
+	//console.log(playbackArray);
 	if (index>0)
-	{	$locationBar.fadeOut();
+	{$locationBar.fadeOut();
+	if (document.getElementById('wander').checked)
 	showBar(playbackArray,0,0);
+	else showBar(playbackArray,0,1);
 	}
 	else
 	{
 	$wait.hide();
 	$locationBar.fadeIn();	
 	jQuery('.message').hide().html("No Memories Found!").fadeIn();
-	}
-	/*
-	var address = document.getElementById("location").value;
-	index = memories.location.indexOf(address);
-	path = memories.path[index];
-	jQuery("#map").html("<img src=\""+path+"/0.jpg\">");
-	musicpath = music[index];
-	thismemory=address;
-	
-	geocoder.geocode( { 'address': address}, function(results, status) {
-		console.log("manual location");										  		
-		if (status == google.maps.GeocoderStatus.OK) {
-			//console.log(results[0].geometry.location);
-			if (results[0].formatted_address.indexOf("USA") !=-1) {
-				console.log("in the USA");
-				jQuery("#omnom").show();
-			}
-			currentlatlng = results[0].geometry.location;
-			getPlaces(currentlatlng); 
-			
-		}
-		else {
-				console.log("reached");										  		
-
-			//console.log("Geocode was not successful for the following reason: " + status);
-			//showError("Can't find your location, try again");
-			jQuery("#omnom").show();
-			var place=new Object;
-			place.name="Dubai - United Arab Emirates";
-			place.formatted_address="Al Mamzar, Deira, Dubai"
-			showBar(place,google.maps.places.PlacesServiceStatus.ZERO_RESULTS);
-		}
-		});
-		*/
-		});
-		
+}
+});
 }
 
-
-//choose another bar
-/*
-jQuery("#shit").click(function(){
-	//if there's still more bars in the array, choose the next one					  
-	if (shitCounter < (resultsStore.length - 1)) {
-		shitCounter++;
-	}
-	//otherwise go back to the beginning
-	else {
-		shitCounter = 0;
-		console.log("repeat");
-	}
-	console.log(shitCounter);
-	chooseBar(resultsStore)
-	window.scroll(0,0);
-	return false
-});
-*/
-
-//hide url bar on ios
-addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false);
-function hideURLbar(){
-        window.scrollTo(0,1)
-    }
-	
-//show error messages	
 function showError(msg){
 	$wait.fadeOut();
 	$locationBar.fadeIn();
@@ -506,27 +333,6 @@ function showError(msg){
 	});
 }
 
-
-//google geocode autocomplete
-var autoOptions = {types: ['geocode']};
-var autoInput = document.getElementById('location');
-autocomplete = new google.maps.places.Autocomplete(autoInput, autoOptions);
-
-//remove duplicate objects in array
-function removeDupes(arr, prop) {
-    var new_arr = [];
-    var lookup  = {};
- 
-    for (var i in arr) {
-        lookup[arr[i][prop]] = arr[i];
-    }
- 
-    for (i in lookup) {
-        new_arr.push(lookup[i]);
-    }
- 
-    return new_arr;
-}
 var x=false;
 function playSlideshow(audio)
 {
@@ -541,9 +347,4 @@ function playSlideshow(audio)
 		window.myFlux.start();	
 		jQuery("#playOverlay").hide();
 		}	
-}
-function relatedClick(loc)
-{
-document.getElementById("location").value=loc;
-codeAddress();
 }

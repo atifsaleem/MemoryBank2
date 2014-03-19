@@ -24,26 +24,25 @@
 <!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-<script src="js/modernizr-2.0.min.js"></script>
 <script src="js/JSON.js"></script>
 
 </head>
-<body background="images/memories.jpg" style="background-repeat: repeat-x">
+<body style="background-repeat: repeat-x">
 <div id="logo"><img src="images/memories-icon.png" /><span id="logotext">MyLife</span></div>
 	<div id="wait">Retrieving <span></span></div>
   <div id="form-wrapper">
       <div id="quicklinks" class="row">
         <div class="iconrow">
         <div class="icon" title="people" id="friends" onclick="javascript:tagCloud(this)"><img src="images/friends-icon.png"><span class="caption">Friends</span></div>
-        <div class="icon" title="people" id="colleagues" onclick="javascript:tagCloud(this)"><img src="images/colleagues-icon.png"><span class="caption">Colleagues</span></div>
-        <div class="icon" title="people" id="classmates" onclick="javascript:tagCloud(this)"><img src="images/classmates-icon.png"><span class="caption">Classmates</span></div>
-        <div class="icon" title="people" id="acquaintances" onclick="javascript:tagCloud(this)"><img src="images/acquaintances-icon.png"><span class="caption">Acquaintances</span></div>
+        <div class="icon" title="people" id="family" onclick="javascript:tagCloud(this)"><img src="images/family-icon.png"><span class="caption">Family</span></div>
+        <div class="icon" title="activity" id="party" onclick="javascript:tagCloud(this)"><img src="images/party-icon.png"><span class="caption">Party</span></div>
+        <div class="icon" title="activity" id="gathering" onclick="javascript:tagCloud(this)"><img src="images/gathering-icon.png"><span class="caption">Gathering</span></div>
       </div>
         <div class="iconrow">
-        <div class="icon" title="mood" id="excited" onclick="javascript:tagCloud(this)"><img src="images/excited-icon.png"><span class="caption">Happy</span></div>
-        <div class="icon" title="mood" id="sad" onclick="javascript:tagCloud(this)"><img src="images/sad-icon.png"><span class="caption">Sad</span></div>
-        <div class="icon" title="mood" id="content" onclick="javascript:tagCloud(this)"><img src="images/content-icon.png"><span class="caption">Content</span></div>
-        <div class="icon" title="mood" id="neutral" onclick="javascript:tagCloud(this)"><img src="images/neutral-icon.png"><span class="caption">Neutral</span></div>
+        <div class="icon" title="emotion" id="happy" onclick="javascript:tagCloud(this)"><img src="images/happy-icon.png"><span class="caption">Happy</span></div>
+        <div class="icon" title="emotion" id="sad" onclick="javascript:tagCloud(this)"><img src="images/sad-icon.png"><span class="caption">Sad</span></div>
+        <div class="icon" title="datepicker" id="2014" onclick="javascript:tagCloud(this)"><img src="images/recent-icon.png"><span class="caption">Recent</span></div>
+        <div class="icon" title="random" id="random" onclick="javascript:randomMemory()"><img src="images/random-icon.png"><span class="caption">Surprise me!</span></div>
       </div>
       </div>
       <div id="locate" class="row">
@@ -51,7 +50,7 @@
           <form id="locationBar" title="many" action="javascript:codeAddress(this)">
             <div style="display:none;" class="message"></div>   
             <div id="locationInput" class="Input"><input id="location" placeholder="Location" type="text"> <input class="weights" id="locationWeight" type="range" name="points" id="points" value="100" min="0" max="100" onchange="changeLabel(this);"><label id="locationWeightDisplay" for="locationWeight">100</label></div>
-            <div id="dateInput" class="Input"><input placeholder="DD/MM/YYYY" type="date" id="datepicker" name='from' size='9' value="" onchange="document.getElementById('datepicker').style.color='#000'"/>   <input class="weights" id="dateWeight" type="range" name="points" id="points" value="100" min="0" max="100" onchange="changeLabel(this);"><label id="dateWeightDisplay" for="dateWeight">100</label></div>
+            <div id="dateInput" class="Input"><input placeholder="DD-MMM-YYYY" type="date" id="datepicker" name='from' size='9' value="" onchange="document.getElementById('datepicker').style.color='#000'"/>   <input class="weights" id="dateWeight" type="range" name="points" id="points" value="100" min="0" max="100" onchange="changeLabel(this);"><label id="dateWeightDisplay" for="dateWeight">100</label></div>
             <div id="peopleInput" class="Input"><input id="people" placeholder="People" type="text">  <input class="weights" id="peopleWeight" type="range" name="points" id="points" value="100" min="0" max="100" onchange="changeLabel(this);"><label id="peopleWeightDisplay" for="peopleWeight">100</label></div>
             <div id="emotionInput" class="Input"><input id="emotion" placeholder="Mood" type="text">  <input class="weights" id="moodWeight" type="range" name="points" id="points" value="100" min="0" max="100" onchange="changeLabel(this);"><label id="moodWeightDisplay" for="moodWeight">100</label></div>
             <div id="activityInput" class="Input"><input id="activity" placeholder="Activity" type="text">  <input class="weights" id="activityWeight" type="range" name="points" id="points" value="100" min="0" max="100" onchange="changeLabel(this);"><label id="activityWeightDisplay" for="activityWeight">100</label></div>
@@ -93,32 +92,17 @@
       </div>
 
 </div>
-<!-- MAPS -->
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places,adsense&sensor=true&key=AIzaSyCTxiWhuS0yb-zBc11xjfNlFubjdYkZtp8" type="text/javascript"></script>
-<!-- G+ -->
-
-<!-- Included JS Files -->
 <script src="js/jquery.js"></script>
 <script src="js/ui/jquery-ui.js"></script>
 <script src="js/jquery.backstretch.js"></script>
 <script src="js/script.js"></script>
 <script type="text/javascript" src="fancybox/jquery.easing-1.3.pack.js"></script>
 <script src="js/flux.min.js"></script>
-    <script src="js/mootools-core-1.3.2.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/mootools-more-1.3.2.1.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/mootools-core-1.3.2.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/mootools-more-1.3.2.1.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="js/foggy.js"></script>
-<script type="text/javascript">
-function tagCloud(elem)
-{
-jQuery("#"+elem.title).val(elem.id);
-codeAddress();
-}
-function changeLabel(elem)
-{
-var label=elem.id+"Display";
-document.getElementById(label).innerHTML = elem.value;  
-}
-</script>
+<script type="text/javascript" src="js/script-aux.js"></script>
+
 </body>
 </html>
