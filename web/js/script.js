@@ -6,7 +6,7 @@ var prevmemorynum=0;
 var final=false;
 var activityToVerb;
 var wordToPlural;
-var music = {'pleased':"music/island.m4a",'excited':"music/peach.m4a",'content':"music/swing.m4a",'aroused':"music/bbq.m4a",'sleepy':"music/lazyday.m4a",'depressed':"music/minuet.mp3",'miserable':"music/acoustic.m4a",'distressed':"music/acoustic.m4a",'neutral':"music/acoustic.m4a"};
+var music = {'happy':"music/island.m4a",'sad':"music/minuet.mp3",'excited':"music/swing.m4a"};
 
 $wait = jQuery('#wait');
 $locationBar = jQuery('#locationBar');
@@ -33,7 +33,8 @@ jQuery(document).ready(function(){
       "Macritchie Reservoir, Singapore",
       "Botanical Gardens, Singapore",
       "Raffles Place, Singapore",
-      "Changi Business Park, Singapore"
+      "Changi Business Park, Singapore",
+      "Bukit Batok, Singapore"
      ];
 	  var availableMoods = [
       "happy",
@@ -113,7 +114,8 @@ function showBar(playbackArray, k, oneormany) {
 	jQuery("#form-wrapper").hide();
 	locMin = playbackArray[k].location.split(',');
 	var pics;
-	audio = new Audio(music[playbackArray[k].mood.toLowerCase()]);
+	audio = new Audio(music[moodList[0].toLowerCase()]);
+	console.log(audio);
 	pics="<div onclick=\"javascript:playSlideshow(audio);\" id=\"playOverlay\" style=\"height: 480px; position: absolute; top: 0px; left: 0px; background-image: url('images/overlay.png'); z-index: 102; cursor: pointer;\"></div>";
 	pics += "<div id=\"slider\" class='no-flick' onclick=\"javascript:playSlideshow(audio);\">";
 	var activity=document.getElementById("activity").value;
@@ -134,11 +136,10 @@ function showBar(playbackArray, k, oneormany) {
 		loopMax=playbackArray.length;
 	for (j=0;j<loopMax;j++)
 	{
-	
-		var relatedBar = "<div class=\"related-divs\" id=\"related-"+playbackArray[j].location.replace(/\s+/g,'').replace(/\,/g,'')+"\"><span class=\"relatedimage\">"+"<img src=\""+playbackArray[j].path+"0.jpg\"></span><span class=\"relatedcaption\">"+playbackArray[j].location+"</span></div>"	
-		jQuery("#related").append(relatedBar);
 		var actlist = playbackArray[j].activity.split(',');
 		var moodlist = playbackArray[j].mood.split(',');
+		var relatedBar = "<div class=\"related-divs\" id=\"related-"+playbackArray[j].location.replace(/\s+/g,'').replace(/\,/g,'')+"\"><span class=\"relatedimage\">"+"<img src=\""+playbackArray[j].path+"0.jpg\"></span><span class=\"relatedcaption\">"+playbackArray[j].location+"</span></div>"	
+		jQuery("#related").append(relatedBar);
 		for (i=0;i<=playbackArray[j].num;i++)
 			{
 				if (activity==actlist[i] || activity=="")
@@ -170,7 +171,7 @@ function showBar(playbackArray, k, oneormany) {
 	window.myFlux = new flux.slider('#slider',{
         autoplay: false,
         transitions: ['dissolve'],
-        captions: true,
+        captions: false,
         delay: 4000,
         onTransitionEnd: function(data) {
         var img = data.currentImage;
@@ -186,19 +187,38 @@ function showBar(playbackArray, k, oneormany) {
  			if (curmemorynum==playbackArray.length)
  				{curmemorynum=0;
  				}
- 			moodListtemp=playbackArray[curmemorynum].mood.split(',');
- 			if (playbackArray[prevmemorynum].mood != playbackArray[curmemorynum].mood)
-			{audio.pause();
-			audio = new Audio(music[playbackArray[curmemorynum].mood.toLowerCase()]);
-			audio.play();}
+ 			moodlistCur=playbackArray[curmemorynum].mood.split(',');
+  			moodlistPrev=playbackArray[prevmemorynum].mood.split(',');
+ 			if (moodlistCur[0] != moodlistPrev[0])
+			{
+			$aud=jQuery(audio);
+			$aud.animate({volume: 0}, 4000, function(){
+			audio.pause();
+			audio = new Audio(music[moodlistCur[0].toLowerCase()]);
+			$aud=jQuery(audio);
+			console.log(audio);
+			audio.volume=0;
+			audio.play();
+			$aud.animate({volume: 1}, 5000);
+			});
+			}
 			jQuery("#destination").fadeOut('slow');
 		}
 		if(img.name!=playbackArray[curmemorynum].max && !final)
 		{
+			var actlist = playbackArray[curmemorynum].activity.split(',');
+			var moodlist = playbackArray[curmemorynum].mood.split(',');
+			var thisAct=actlist[parseInt(img.name)];
+			var thisMood=moodlist[parseInt(img.name)];
+			if (thisAct=="-"|| typeof thisAct==="undefined")
+				thisAct="";
+			if (thisMood=="-" || typeof thisMood==="undefined")
+			thisMood="";
+			else thisMood="Feeling "+thisMood;
 			jQuery('div.related-divs').foggy();
 			jQuery("#related-"+playbackArray[curmemorynum].location.replace(/\s+/g,'').replace(/\,/g,'')).foggy(false);
 			locMin = playbackArray[curmemorynum].location.split(',');
-			jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[curmemorynum].people+" on "+playbackArray[curmemorynum].date);
+			jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>"+thisAct+" at " + locMin[0] + " <br>with "+ playbackArray[curmemorynum].people+". "+thisMood+"<br>on "+playbackArray[curmemorynum].date);
  			jQuery("#destination").fadeIn('slow');
 		}
 
@@ -207,7 +227,17 @@ function showBar(playbackArray, k, oneormany) {
 
 	$wait.fadeOut("slow",function(){
 	document.getElementById("map").style.visibility="visible";
-	jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[k].people+" on "+playbackArray[k].date);
+	var actlist = playbackArray[k].activity.split(',');
+	var moodlist = playbackArray[k].mood.split(',');
+	var thisAct=actlist[0];
+	var thisMood=moodList[0];
+	if (thisAct=="-")
+		thisAct="";
+	if (thisMood=="-")
+		thisMood="";
+	else thisMood="Feeling "+thisMood;
+	jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>"+thisAct+" at " + locMin[0] + " <br>with "+ playbackArray[k].people+". "+thisMood+"<br>on "+playbackArray[k].date);
+	//jQuery("#destination").html("<div target='#' title='VISIT THE WEBSITE'>You were at " + locMin[0] + " with "+ playbackArray[k].people+" on "+playbackArray[k].date);
 	jQuery("#related").css("visibility","visible");
 	});
 }
@@ -242,12 +272,15 @@ function codeAddress(elem) {
 	var score=0;
 	var greatestScore=0;
 	for (i = 0; i < memories.length; ++i) {	
-    if(location.toLowerCase()==memories[i].location.toLowerCase())
+    if(location.toLowerCase()==memories[i].location.toLowerCase() || document.getElementById('wander').checked)
 	{		
-
+	if (location.toLowerCase()==memories[i].location.toLowerCase())
 	score+=parseInt(locationWeight);
+	else score++;
 	//console.log("Score of "+memories[i].location+"after loc is "+score);
 	}
+	else if(memories[i].location.toLowerCase().indexOf(location.toLowerCase()) != -1 && location != "")
+		score++;
 	if(memories[i].date.toLowerCase().indexOf(date.toLowerCase()) != -1 && date != "")
 	{
 
@@ -280,7 +313,6 @@ function codeAddress(elem) {
 
 	if(memories[i].activity.toLowerCase().indexOf(activity) == -1 && activity != "")
 	{
-	console.log('activity is: '+activity);
 	score=0;
 	}
 	//console.log("Score of "+memories[i].location+" is "+score);
@@ -290,10 +322,14 @@ function codeAddress(elem) {
 	{
 	var temp=playbackArray[0];
 	playbackArray[0]=memories[i];
+	playbackArray[0].score=score;
 	playbackArray[index]=temp;
 	score=0;
 	}
-	else {playbackArray[0]=memories[i];score=0
+	else {playbackArray[0]=memories[i];
+	playbackArray[0].score=score;
+	//console.log(memories[i].id);
+	score=0;
 	index++;
 	continue;
 	}
@@ -301,17 +337,22 @@ function codeAddress(elem) {
 	if (score>0)
 	{
 	playbackArray[index]=memories[i];
+	playbackArray[index].score=score;
+	//console.log(memories[i].id);
 	index++;
 	}
 	score=0;
 
 	}
+	var sorted = playbackArray.slice(0);
+	sorted.sort(function(a,b) {
+    return b.score - a.score;
+	});
+
 	//console.log(playbackArray);
 	if (index>0)
 	{$locationBar.fadeOut();
-	if (document.getElementById('wander').checked)
-	showBar(playbackArray,0,0);
-	else showBar(playbackArray,0,1);
+	showBar(sorted,0,0);
 	}
 	else
 	{
@@ -335,15 +376,20 @@ function showError(msg){
 
 var x=false;
 function playSlideshow(audio)
-{
+{	$aud=jQuery(audio);
 	if (window.myFlux.isPlaying())
 		{
-		audio.pause()
+		$aud.animate({volume: 0}, 2000, function(){
+			audio.pause();
+		});
 		window.myFlux.stop();
 		jQuery("#playOverlay").show();
 		}
 	else
-		{audio.play();
+		{		
+		audio.volume=0;
+		audio.play();
+		$aud.animate({volume: 1}, 5000);
 		window.myFlux.start();	
 		jQuery("#playOverlay").hide();
 		}	

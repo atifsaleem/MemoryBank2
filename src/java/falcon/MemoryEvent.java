@@ -14,7 +14,6 @@ package falcon;
  * @author WA0003EN
  */
 
-import falcon.EpisodicModel.GeocodeResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -22,9 +21,6 @@ import java.util.Date;
 
 public class MemoryEvent {
     
-   public static final String allEmotions [] = new String [] {"really good","good","not good or bad","bad","really bad","really happy","happy","not happy or sad","sad","really sad"};
-   public static final String allVerbs[] = new String [] {"walking","eating","chilling","watching a movie","listening to music","travelling","running","playing","swimming","talking"};
-   public static final String allPeople[] = new String[] {"Pierre","Enric","Federico","Emilie","Danielle,","Kota","Tetsu","Max","Michael","Declan","Simon","Tim","Shaun"};
    
    private double curLat;
    private double curLong;
@@ -94,36 +90,7 @@ public class MemoryEvent {
                      Date date  = new Date(timestamp);
                      long time = date.getTime();
                      curTime = new Timestamp(time);
-                     //System.out.println(timestamp+","+emotional_state);
-                    story=story+" "+allVerbs[activity]+" at "+getAddressFromLatLng(curLat,curLong)+" at "+". It was "+allEmotions[emotional_state]+"\n";
-                    story = formatStory(story,index);
                   
-    }
-    protected static String getAddressFromLatLng(double lat,double lng) throws IOException
-    {   
-        GeocodeResponse location = new GeocodeResponse();
-        try{
-            /*
-          HttpGet geocode = new HttpGet("http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true");
-          HttpResponse response = httpclient.execute(geocode);
-          HttpEntity entity2 = response.getEntity();
-          StringBuilder temp = inputStreamToString(entity2.getContent());
-	// convert String into InputStream
- 
-	// read it with BufferedReader
-          location = gson.fromJson(temp.toString(), GeocodeResponse.class);
-         */
-        }
-        catch (Exception e)
-        {
-        e.printStackTrace();
-        }
-        finally {
-          
-        }
-    
-        //return location.getResults().get(0).getFormatted_address();
-        return "Paris, France";
     }
     public double getCurLat() {
         return curLat;
@@ -213,16 +180,4 @@ public class MemoryEvent {
         return story;
     }
 
-    private String formatStory(String story,int index) {
-        String temp=story;
-       
-        if (index==0)
-        temp = "Fri, 10 May 2013 20:26:23 GMT - I was with Pierre, Enric and Federico - Dubai, United Arab Emirates - It was really good.";
-        else if (index==5)
-        temp = "Wed, 13 Nov 2013 19:28:46 GMT - I was with Federico, Emilie and Danielle - Singapore, Singapore - It was bad.";
-        else if (index==9)
-        temp = "Wed, 15 Nov 2013 23:28:46 GMT - I was with Danielle, Kota and Tetsu in - Paris , France - It was not good or bad.";
-        else temp="";
-        return temp;
-    }
 }
