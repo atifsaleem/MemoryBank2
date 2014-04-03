@@ -81,6 +81,10 @@ public class FusionART {
 		rho = new double[r.length];
 		copyArray(r,rho);
 	}
+        public void setContribution(double[] g)
+        {
+            this.gamma=g;
+        }
 	
 	public void overWritePara (double ic, double rr, double pr, double dr, double t) {
 		initConfidence = ic;

@@ -6,7 +6,7 @@ var prevmemorynum=0;
 var final=false;
 var activityToVerb;
 var wordToPlural;
-var music = {'happy':"music/island.m4a",'sad':"music/minuet.mp3",'excited':"music/swing.m4a"};
+var music = {'happy':"music/happy.mp3",'sad':"music/minuet.mp3",'excited':"music/excited.mp3"};
 
 $wait = jQuery('#wait');
 $locationBar = jQuery('#locationBar');
@@ -106,6 +106,10 @@ jQuery(document).ready(function(){
     });
 	//document.body.style.background = "url('images/bg.jpg')";
 	jQuery.backstretch("images/garfield-interior.jpg");
+    var myParam = location.search.split('refresh=')[1]
+    console.log(myParam);
+	if (myParam)
+		getDataAndSetFields();
 });
 
 function showBar(playbackArray, k, oneormany) {
@@ -119,9 +123,33 @@ function showBar(playbackArray, k, oneormany) {
 	pics="<div onclick=\"javascript:playSlideshow(audio);\" id=\"playOverlay\" style=\"height: 480px; position: absolute; top: 0px; left: 0px; background-image: url('images/overlay.png'); z-index: 102; cursor: pointer;\"></div>";
 	pics += "<div id=\"slider\" class='no-flick' onclick=\"javascript:playSlideshow(audio);\">";
 	var activity=document.getElementById("activity").value;
-	if (activity!="")
+	var mood=document.getElementById("emotion").value;
+	var location=document.getElementById("location").value;
+	var date=document.getElementById("datepicker").value;
+	var people=document.getElementById("people").value;
+	if (activity!="" && mood=="" && location=="" && date=="" && people=="")
 	{
 	pics+="<img name=-1 src=\"http://placehold.it/980x500&text=memories+of+"+wordToPlural[activity]+"\">";
+	}
+	else if (activity=="" && mood!="" && location=="" && date=="" && people=="")
+	{
+	pics+="<img name=-1 src=\"http://placehold.it/980x500&text="+mood+"+memories\">";
+	}
+	else if (activity=="" && mood=="" && location!="" && date=="" && people=="")
+	{
+	pics+="<img name=-1 src=\"http://placehold.it/980x500&text=memories+at+"+location+"\">";
+	}
+	else if (activity=="" && mood=="" && location=="" && date!="" && people=="")
+	{
+	pics+="<img name=-1 src=\"http://placehold.it/980x500&text=memories+from+"+date+"\">";
+	}
+	else if (activity=="" && mood=="" && location=="" && date=="" && people!="")
+	{
+	pics+="<img name=-1 src=\"http://placehold.it/980x500&text=memories+with+"+people+"\">";
+	}
+	else
+	{
+	pics+="<img name=-1 src=\"http://placehold.it/980x500&text=here+are+your+memories\">";
 	}
 	jQuery('#slider').css({
 	'position':'relative',
@@ -259,6 +287,8 @@ function codeAddress(elem) {
 	var moodWeight = document.getElementById("moodWeight").value;
 	var activity = document.getElementById("activity").value;
 	var activityWeight = document.getElementById("activityWeight").value;
+	cookieData="location:"+location+",datepicker:"+date+",people:"+people+",emotion:"+mood+",activity:"+activity.substring(0,activity.length-1);
+	createCookie("data",cookieData,1);
 	if (date=="")
 		dateWeight=0;
 	if (people=="")
@@ -393,4 +423,60 @@ function playSlideshow(audio)
 		window.myFlux.start();	
 		jQuery("#playOverlay").hide();
 		}	
+}
+function reset()
+{
+jQuery("#related").fadeOut("slow",function(){
+jQuery("#destination").fadeOut("slow",function(){
+jQuery("#mapcontainer").fadeOut("slow",function(){
+jQuery("#form-wrapper").fadeIn("slow",function(){
+$locationBar.fadeIn("slow");
+});
+});	
+});
+
+});
+
+}
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	createCookie(name,"",-1);
+}
+
+function getDataAndSetFields()
+{
+if (readCookie("data"))
+{
+var raw=readCookie("data");
+var string=raw.split(",");
+console.log(string);
+for (i=0;i<string.length;i++)
+	{
+	var one=string[i].split(":");	
+	console.log(one);
+	attribute=one[0];
+	value=one[1];
+	document.getElementById(attribute).value=value;
+	}
+}
 }

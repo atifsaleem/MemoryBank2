@@ -10,5 +10,11 @@
     <create creator="new" javascript="EpisodicModel">
       <param name="class" value="falcon.EpisodicModel"/>
     </create>
+            <convert converter="bean" match="falcon.EpisodicModel"/>
+        <create creator="new" javascript="EpisodicModel" class="falcon.EpisodicModel">
+            <include method="searchAndRetrieveMemories"/>
+            <include method="countApartments"/>
+        </create>
+
   </allow>
 </dwr>

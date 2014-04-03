@@ -1,5 +1,10 @@
 function tagCloud(elem)
 {
+document.getElementById("location").value="";
+document.getElementById("datepicker").value="";
+document.getElementById("people").value="";
+document.getElementById("emotion").value="";
+document.getElementById("activity").value="";
 jQuery("#"+elem.title).val(elem.id);
 codeAddress();
 }

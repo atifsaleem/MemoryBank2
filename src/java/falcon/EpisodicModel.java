@@ -10,13 +10,15 @@ package falcon;
  * @author WA0003EN
  */
 
+import com.google.code.geocoder.Geocoder;
+import com.google.code.geocoder.GeocoderRequestBuilder;
+import com.google.code.geocoder.model.GeocodeResponse;
+import com.google.code.geocoder.model.GeocoderRequest;
+import com.google.code.geocoder.model.GeocoderResult;
 import java.io.*;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
-import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,89 +26,53 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
-import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 @WebServlet(urlPatterns = {"/EpisodicModel"})
 public class EpisodicModel extends HttpServlet{
     protected FusionARTGEncoding seqLearner;
     protected FusionART eventLearner;
+    protected final Geocoder geocoder = new Geocoder();
    
     //protected String filePath="C:\\Documents and Settings\\User\\Desktop\\My Dropbox\\wenwen\\em-modified\\";
     protected String filePath="/Users/atifsaleem/NetBeansProjects/Falcon_14_05_10_atif/data";
     private double[][] input_e1;
     //protected String filePath= System.getProperty("user.dir")+"\\";
+    private int acitivityVal;
     
-    public EpisodicModel() throws IOException{
+    public EpisodicModel() throws IOException, java.text.ParseException{
         seqLearner=new FusionARTGEncoding();
         eventLearner=new FusionART();
         /*
          * Location Encoding 
         
          */
-        
-        int[] le={2,6};
-        double[] b={(double)1.0,(double)1.0};
-        double[] a={(double)0.1,(double)0.1};
-        double[] g={(double)0.5,(double)0.5};
-        double[] r={(double)1.0,(double)1.0};
+        int[] le={4,14,6,2,2,22};
+        double[] b={(double)0.2,(double)0.1,(double)0.1,(double)0.1,(double)0.2,(double)0.1};
+        double[] a={(double)0.1,(double)0.1,(double)0.1,(double)0.1,(double)0.1,(double)0.1};
+        double[] g={(double)1.0,(double)1.0,(double)1.0,(double)1.0,(double)1.0,(double)1.0};
+        double[] r={(double)0.6,(double)1.0,(double)1.0,(double)1.0,(double)0.6,(double)1.0};
         int number = 0;
-        this.initEventPara(2, le, b, a, g, r);
+        this.initEventPara(6, le, b, a, g, r);
         
-        this.initSeqPara(1.0,.1 , 1.0, 1.0);
-        double[][] input_e1={{(double).04885,(double).00235},{(double).02,(double).02,(double).03, (double)0.1368217583, (double)0.0, (double) 0.1}};
-        double[][] input_e2={{(double).04885,(double).00235},{(double).01,(double).02,(double).03, (double)0.1368217583, (double)0.0,(double) 0.2}};
-        double[][] input_e3={{(double).04885,(double).00235},{(double).01,(double).02,(double).03, (double)0.1368217583, (double)0.0,(double) 0.3}};
-        double[][] input_e4={{(double).04885,(double).00234},{(double).01,(double).02,(double).03, (double)0.1368217583, (double)0.0,(double) 0.4}};
-        double[][] input_e5={{(double).04885,(double).00235},{(double).01,(double).02,(double).03, (double)0.1368217583, (double)0.0,(double) 0.5}};
-        double[][] input_e6={{(double)0.07109307,(double)0.15218383},{(double).03,(double).04,(double).05,(double)0.1384370926,(double)0.3,(double) 0.1}};
-        double[][] input_e7={{(double)0.07109307,(double)0.15218383},{(double).03,(double).04,(double).05,(double)0.1384374526,(double)0.3,(double) 0.2}};
-        double[][] input_e8={{(double)0.07109307,(double)0.15218383},{(double).03,(double).04,(double).05,(double)0.1384378126,(double)0.3,(double) 0.3}};
-        double[][] input_e9={{(double)0.07109307,(double)0.15218383},{(double).03,(double).04,(double).05,(double)0.1384381726,(double)0.3,(double) 0.4}};
-        double[][] input_e10={{(double)0.0240355,(double)0.01537823},{(double)0.5,(double)0.6,(double)0.7,(double)1384385326,(double)0.2,(double) 0.1}};
-        double[][] input_e11={{(double)0.0240355,(double)0.01537823},{(double)0.5,(double)0.6,(double)0.7,(double)1384388926,(double)0.2,(double) 0.2}};
-        double[][] input_e12={{(double)0.0240355,(double)0.01537823},{(double)0.5,(double)0.6,(double)0.7,(double)(double)1384514926,(double)0.2,(double) 0.3}};
-
-        System.out.println("learn_1");
-        this.newEvent(input_e1);
-        System.out.println("learn_2");
-        this.newEvent(input_e2);
-        System.out.println("learn_3");
-        this.newEvent(input_e3);
-        System.out.println("learn_4");
-        this.newEvent(input_e4);
-        System.out.println("learn_5");
-        this.newTermination(input_e5);
-        //this.seqLearner.print();
-        this.seqLearner.resetCurSeq();
-        this.seqLearner.resetActivityF1();
-        this.seqLearner.resetBaseLineTho();
-        
-        System.out.println("learn_6");
-        this.newEvent(input_e6);
-        System.out.println("learn_7");
-        this.newEvent(input_e7);
-        System.out.println("learn_8");
-        this.newEvent(input_e8);
-        System.out.println("learn_9");
-        this.newTermination(input_e9);
-        //this.seqLearner.print();
-        
-        this.seqLearner.resetCurSeq();
-        this.seqLearner.resetActivityF1();
-        this.seqLearner.resetBaseLineTho();
-        
-        System.out.println("learn_10");
-        this.newEvent(input_e10);
-        System.out.println("learn_11");
-        this.newEvent(input_e11);
-        System.out.println("learn_12");
-        this.newTermination(input_e12);
-        //this.seqLearner.print();
-        this.seqLearner.resetCurSeq();
-        this.seqLearner.resetActivityF1();
-        this.seqLearner.resetBaseLineTho();
+        this.initSeqPara(1.0, .1 , 1.0, 1.0);
+        String filename = "/Applications/XAMPP/xamppfiles/htdocs/MemoryBank2/web/js/JSON.js";
+        this.readFromFile(filename);
         //this.getPlayBack();
         
         
@@ -143,22 +109,294 @@ public class EpisodicModel extends HttpServlet{
         //this.printEposidic();
 
     }
-    public String getMemory(String input)
+    @SuppressWarnings("empty-statement")
+    protected void readFromFile(String filename)
     {
-    if (input=="DUBAI - UNITED ARAB EMIRATES")
+    	JSONParser parser = new JSONParser();
+ 
+	try {
+                Object obj = parser.parse(new FileReader(filename));
+		JSONObject jsonObject = (JSONObject) obj;
+               JSONArray memories = (JSONArray) jsonObject.get("memories");
+               Iterator<String> iterator = memories.iterator();
+		while (iterator.hasNext()) {                    
+                System.out.println(iterator.next());
+		String location = (String) jsonObject.get("location");
+                String date = (String) jsonObject.get("date");
+		String people = (String) jsonObject.get("people");
+                String mood = (String) jsonObject.get("mood");
+		String activity = (String) jsonObject.get("activity");
+                String imagery = (String) jsonObject.get("path");
+                GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(location).setLanguage("en").getGeocoderRequest();
+                GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
+                List<GeocoderResult> results = geocoderResponse.getResults();
+                float latitude = results.get(0).getGeometry().getLocation().getLat().floatValue();
+                float longitude = results.get(0).getGeometry().getLocation().getLng().floatValue();
+                latitude = normalize(latitude);
+                float latitudeComp = 1 - latitude;
+                longitude = normalize(longitude);
+                float longitudeComp = 1 - longitude;
+                Date lFromDate1 = new Date();
+                try{
+                SimpleDateFormat datetimeFormatter1 = new SimpleDateFormat("dd-MMM-yyyy");
+                lFromDate1 = datetimeFormatter1.parse(date);
+                }
+                catch (java.text.ParseException ex) {
+                    Logger.getLogger(EpisodicModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally{
+                try {
+                    SimpleDateFormat datetimeFormatter1 = new SimpleDateFormat("MMM");
+                    lFromDate1 = datetimeFormatter1.parse(date);
+                }   catch (java.text.ParseException ex) {
+                        Logger.getLogger(EpisodicModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                finally {
+                                try {
+                    SimpleDateFormat datetimeFormatter1 = new SimpleDateFormat("yyyy");
+                    lFromDate1 = datetimeFormatter1.parse(date);
+                }   catch (java.text.ParseException ex) {
+                        Logger.getLogger(EpisodicModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                 finally {
+                    try {
+                    SimpleDateFormat datetimeFormatter1 = new SimpleDateFormat("dd");
+                    lFromDate1 = datetimeFormatter1.parse(date);
+                    }
+                    catch (java.text.ParseException ex)
+                    {
+                    Logger.getLogger(EpisodicModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }                   
+                }
+                }
+                }
+                
+                Timestamp fromTS1 = new Timestamp(lFromDate1.getTime());
+                long timestamp = fromTS1.getTime();
+                float time  = normalize((float)timestamp);
+                float timeComp = 1 - time;
+                people = people.toUpperCase();
+                String[] peopleSplit = people.split(",");
+                mood = mood.toUpperCase();
+               String[] moodSplit = mood.split(",");
+                activity = activity.toUpperCase();
+                 String[] activitySplit = activity.split(",");
+                Set<Integer> keys = MemoryEvent.getKeysByValue(MemoryEvent.symlinks, imagery);
+                int key = new ArrayList<Integer>(keys).get(0);
+                float img = (float) key;
+                img = normalize(img);
+                float imgComp = 1-img;
+                for (int i =0; i < peopleSplit.length;i++)
+                {
+                    double[][] input = {{latitude,latitudeComp,longitude,longitudeComp},{0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0},{0.0,1.0,0.0,1.0,0.0,1.0},{img,imgComp},{time,timeComp},{0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0}};
+                    String ppl = peopleSplit[i];
+                    int peopleVal = MemoryEvent.peopleList.valueOf(ppl).ordinal();
+                    input[1][peopleVal]=1.0;
+                    input[1][peopleVal+1]=0.0;
+                    String md = moodSplit[i];
+                    int moodVal = MemoryEvent.moodList.valueOf(md).ordinal();
+                    input[2][moodVal]=1.0;
+                    input[2][moodVal+1]=0.0;
+                    String act = activitySplit[i];
+                    int activityVal = MemoryEvent.activityList.valueOf(activity).ordinal();
+                    input[5][activityVal]=1.0;
+                    input[5][activityVal+1]=0.0;
+                    if (i!=peopleSplit.length-1)
+                    this.newEvent(input);
+                    else 
+                    {
+                    this.newTermination(input);
+                    this.seqLearner.resetCurSeq();
+                    this.seqLearner.resetActivityF1();
+                    this.seqLearner.resetBaseLineTho();
+                    }
+                }
+		}
+ 
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
+ 
+     }
+    public String searchAndRetrieve(String q, int[] weights, int wander) throws java.text.ParseException{
+    JSONObject query = this.stringToQuery(q);
+    JSONArray memories = new JSONArray();
+    ArrayList<MemoryEvent> wanderList = new ArrayList();
+    String location = (String) query.get("location");
+    String date = (String) query.get("date");
+    String people = (String) query.get("people");
+    String mood = (String) query.get("mood");
+    String activity = (String) query.get("activity");
+    
+    GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(location).setLanguage("en").getGeocoderRequest();
+    GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
+    List<GeocoderResult> results = geocoderResponse.getResults();
+    float latitude = results.get(0).getGeometry().getLocation().getLat().floatValue();
+    float longitude = results.get(0).getGeometry().getLocation().getLng().floatValue();
+    latitude = normalize(latitude);
+    longitude = normalize(longitude);
+    SimpleDateFormat datetimeFormatter1 = new SimpleDateFormat("dd-MMM-yyyy");
+    Date lFromDate1 = datetimeFormatter1.parse(date);
+    Timestamp fromTS1 = new Timestamp(lFromDate1.getTime());
+    MemoryEvent cue = new MemoryEvent(latitude,longitude,fromTS1,people,mood,activity); 
+    double[] gamma = new double[weights.length];
+    for(int i=0; i<weights.length; i++) {
+    gamma[i] = weights[i]/100;
+    }
+    this.eventLearner.setContribution(gamma);
+    getMemories(cue,memories,wanderList);
+    if (wander==2)
     {
-    return "Fri, 10 May 2013 20:26:23 GMT - I was with Pierre, Enric and Federico - Dubai, United Arab Emirates - It was really good.";
+    wander--;
+    getMemories(wanderList.get(0),memories,wanderList);
     }
-    else if (input=="SINGAPORE")
+    if (wander==1)
     {
-    return "Wed, 13 Nov 2013 19:28:46 GMT - I was with Federico, Emilie and Danielle - Singapore, Singapore - It was bad.";
+    wander--;
+    getMemories(wanderList.get(1),memories,wanderList);
     }
-    else if (input=="PARIS, FRANCE")
+    return memories.toJSONString();
+    }
+    
+    protected JSONObject stringToQuery(String q){
+    String[] s = q.split(",");
+    JSONObject temp = new JSONObject();
+    for (int i=0;i<s.length;i++)
     {
-    return "Wed, 15 Nov 2013 23:28:46 GMT - I was with Danielle, Kota and Tetsu in - Paris , France - It was not good or bad.";
+    String[] keyvalue = s[i].split(":");
+    String key = keyvalue[0];
+    String value = keyvalue[1];
+    temp.put(key, value);
     }
-    else return "";
+    return temp;
     }
+    protected void getMemories(MemoryEvent event,JSONArray memories,ArrayList<MemoryEvent> wanderList)
+    {
+    double[][] input = encodeMemory(event);
+    JSONObject single = new JSONObject();
+    boolean first = true;
+    this.newEvent(input);
+    LinkedHashMap<Integer,Double> winners = this.seqLearner.WinnerFromF1New();
+    Iterator<Integer> it = winners.keySet().iterator();
+    while (it.hasNext())
+    {
+    int swin = it.next().intValue();
+    this.seqLearner.setActivityF2(swin,0);
+    this.seqLearner.seqToActivityF1(); 
+            if(swin!=0){
+            this.seqLearner.readOutSeq(swin);
+            this.seqLearner.activityF1ToCurSeq();
+            double stho = 1.1;
+            int wn = -1;
+            int index =-1;
+            while(stho>0){
+            
+                //wn = this.getNextIdxSeq(stho);
+                index++;
+                wn=this.seqLearner.curSeq.get(index);
+                stho = this.getNextMaxSeq(stho);
+                if(wn>=0){
+                    double[][] ifield = this.eventLearner.getAllOutput(wn);
+                    MemoryEvent e = decodeMemory(ifield); 
+                    if (first)
+                    {
+                    wanderList.add(e);
+                    first=false;
+                    }
+                    int imagery = (int) ifield[3][0];
+                    Integer img = imagery;
+                    String path = MemoryEvent.symlinks.get(img);
+                    single.put("location", e.getLocationString());
+                    single.put("date", e.getFormattedTime());
+                    single.put("people",e.getPeople());
+                    single.put("mood",e.getMood());
+                    single.put("activity",e.getActivity());
+                    single.put("path",path);
+                   }
+            }
+     memories.add(index, event);
+    }
+    }
+    }
+    protected double[][] encodeMemory(MemoryEvent event)
+    {
+                double latitude = event.getCurLat();
+                double longitude = event.getCurLong();
+                latitude = normalize((float) latitude);
+                float latitudeComp = (float) (1 - latitude);
+                longitude = normalize((float) longitude);
+                float longitudeComp = (float) (1 - longitude);
+                long timestamp = event.getCurTime().getTime();
+                float time  = normalize((float)timestamp);
+                float timeComp = 1 - time;
+                String people = event.getPeople();
+                people = people.toUpperCase();
+                String mood = event.getMood();
+                mood = mood.toUpperCase();
+                String activity = event.getActivity();
+                activity = activity.toUpperCase();
+                double[][] input = {{latitude,latitudeComp,longitude,longitudeComp},{0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0},{0.0,1.0,0.0,1.0,0.0,1.0},{0.0,1.0},{time,timeComp},{0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0}};
+                int peopleVal = MemoryEvent.peopleList.valueOf(people).ordinal();
+                int moodVal = MemoryEvent.moodList.valueOf(mood).ordinal();
+                int activityVal = MemoryEvent.activityList.valueOf(activity).ordinal();
+                input[1][peopleVal]=1.0;
+                input[1][peopleVal+1]=0.0;
+                input[2][moodVal]=1.0;
+                input[2][moodVal+1]=0.0;
+                input[5][activityVal]=1.0;
+                input[5][activityVal+1]=0.0;
+                return input;
+    }
+    protected MemoryEvent decodeMemory(double[][] input)
+    {
+    double normLat=input[0][1];
+    double normLong=input[0][3];
+    double latitude = inverse((float) normLat);
+    double longitude = inverse((float) normLat);
+    double timestamp = inverse((float) input[3][0]);
+    Timestamp t = new Timestamp((long) timestamp);
+    String people="";
+    for (int i=0;i<14;i+=2)
+    {
+    if (input[1][i]==1.0)
+    {
+    people+=MemoryEvent.peopleList.values()[i];
+    people+=",";
+    }
+    }
+    String mood="";
+    for (int i=0;i<6;i+=2)
+    {
+    if (input[2][i]==1.0)
+    {
+    mood+=MemoryEvent.moodList.values()[i];
+    }
+    }
+    String activity="";
+    for (int i=0;i<22;i+=2)
+    {
+    if (input[2][i]==1.0)
+    {
+    activity+=MemoryEvent.activityList.values()[i];
+    }
+    }
+    MemoryEvent m = new MemoryEvent(latitude, longitude, t, people, mood, activity);
+    return m;
+    }
+    private float normalize(float x)
+    {
+    return (float) (1 / (1 + Math.exp(-x)));
+    }
+    public float inverse(float x){
+
+   return (float) (1/(1+(Math.exp(-x))));
+   
+    }
+    
     protected void initSeqPara(double b, double a, double g, double r){
         seqLearner.initParameters(b, a, g, r);
     }
@@ -335,61 +573,6 @@ public class EpisodicModel extends HttpServlet{
         }
     }
     
-    public String testMethod(String input) throws IOException{
-    
-        double[][] input_e1={{(double).04885,(double).00235},{(double).02,(double).02,(double).03, (double)0.1368217583, (double)0.0, (double) 0.1}};
-
-        System.out.println("learn_1");
-        this.newEvent(input_e1);
-        String storyString = null;
-
-        this.seqLearner.seqToActivityF1();
-        //this.printEposidic();
-        //int swin = this.seqLearner.findWinnerFromF1();
-       // this.seqLearner.activityF1Print();
-        int swin = this.seqLearner.WinnerFromF1();
-        //swin = this.seqLearner.findWinner(this.seqLearner.activityF1, 0);
-        if(swin>=0){
-            System.out.println("Winner is sequence:");
-            this.seqLearner.readOutSeq(swin);
-            this.seqLearner.activityF1ToCurSeq();
-            System.out.println("curSeq: " + this.seqLearner.curSeq);
-            System.out.println("curSeqWeight" + this.seqLearner.curSeqWeight);
-            double stho = 1.1;
-            int wn = -1;
-            System.out.println("-----------------------");
-            System.out.println("Recalling from partial episodes:");
-            int index =-1;
-            while(stho>0){
-               
-                //wn = this.getNextIdxSeq(stho);
-                index++;
-                wn=this.seqLearner.curSeq.get(index);
-                stho = this.getNextMaxSeq(stho);
-                System.out.println(stho);
-                System.out.println("seq win: " + wn + " stho: " + stho);
-                if(wn>=0){
-                    String plist = "";
-                    double lat = 0,lng = 0;
-                    long timestamp = 0;
-                    int emotional_state = 0;
-                    int verb = 0;
-                    double[][] ifield = this.eventLearner.getAllOutput(wn);
-                    MemoryEvent e = new MemoryEvent(ifield,wn);
-                    if (index==0)
-                    storyString = e.getStory();
-                    if (this.getNextMaxSeq(stho)==0.0)
-                    {  System.out.println("-----------------------\n"+storyString+"\n-----------------------");
-                        break;}
-                }
-            }
-
-        } else {
-            System.out.println("No Winner!");
-        }
-        return storyString;
-
-    }
     public double getNextMaxSeq(double startTho){
         double maxv = 0.0;
         //System.out.println("curSeq " + seqLearner.curSeq);
@@ -417,7 +600,7 @@ public class EpisodicModel extends HttpServlet{
     
    
     
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, java.text.ParseException{
         EpisodicModel m = new EpisodicModel();
     }
     

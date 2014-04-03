@@ -14,7 +14,13 @@ import java.io.*;
 import java.io.IOException;
 import java.util.Scanner;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class FusionARTGEncoding{
     protected NumberFormat df = NumberFormat.getInstance();
@@ -45,7 +51,6 @@ public class FusionARTGEncoding{
     final static double FRACTION = 0.00001;
     //final static double FRACTION = 0.01;
     final static double BASELINETHO = 1.0;
-    
     protected double tho=BASELINETHO;
     protected int numF1=0; //number of nodes on F1 (input) field
     protected Vector<Double> curSeqWeight=new Vector<Double>(0);
@@ -401,8 +406,7 @@ public class FusionARTGEncoding{
     		}
     	}
     }
-    
-    public int codeCompetition () {
+        public int codeCompetition () {
     	double max_act = 0;
     	int c = -1;
     	
@@ -417,6 +421,24 @@ public class FusionARTGEncoding{
         //System.out.println("Result ="+c);
         
     	return c;
+    }
+    
+
+    public LinkedHashMap<Integer,Double> codeCompetitionNew () {
+    	double max_act = 0;
+    	int c = -1;
+    	LinkedHashMap<Integer,Double> winners = null;
+        //System.out.println("Phase code competition");
+    	for (int j=0; j<numCode; j++) {
+    		if (activityF2[j] > this.threshold) {
+    			max_act = activityF2[j];
+    			c = j;
+                        winners.put(j, activityF2[j]);
+    		}
+    	}
+    	this.sortHashMapByValues(winners);
+        //System.out.println("Result ="+c);
+    	return winners;
     }
     
     public Vector<Integer> codeCompetitionPartial () {
@@ -523,8 +545,16 @@ public class FusionARTGEncoding{
         }
         return winner;
     }    
-    
-    public int findWinner (double[][] input, int ART_MODE) {
+    public LinkedHashMap<Integer,Double> WinnerFromF1New () {
+        LinkedHashMap<Integer,Double> winners = null;
+        if(numCode>0){
+            seqToActivityF1();
+            activityF2=new double[numCode];            
+            winners=findWinnerNew(activityF1,FUZZYART);
+        }
+        return winners;
+    }
+        public int findWinner (double[][] input, int ART_MODE) {
     	int winner = -1;
     	double temp_rho;
         temp_rho = rho;
@@ -545,6 +575,34 @@ public class FusionARTGEncoding{
     	}while (true);
     	
     	return winner;
+    }
+
+    public LinkedHashMap<Integer,Double> findWinnerNew (double[][] input, int ART_MODE) {
+    	LinkedHashMap<Integer,Double> winners = null;
+    	double temp_rho;
+        temp_rho = rho;
+    	
+    	this.setActivityF1(input);
+    	this.computeChoice(ART_MODE);
+    	
+    	do {
+    		winners = this.codeCompetitionNew();
+    		if (winners==null) break;    		
+                Iterator<Integer> it = winners.keySet().iterator();
+                while (it.hasNext())
+                {
+                   Integer i = it.next();
+    		if (!this.resonanceOccur(i.intValue(),temp_rho)) {
+                    //resonance occured..Loop again
+                    this.setActivityF2(i.intValue(),0);
+                }
+                else
+                    break;
+    		}
+                
+    	}while (true);
+    	
+    	return winners;
     }
     
     public int findWinnerPartial () {
@@ -1067,7 +1125,38 @@ public class FusionARTGEncoding{
             System.out.println("");
         }*/
     }
-    
+    public LinkedHashMap<Integer,Double> sortHashMapByValues(HashMap<Integer,Double> passedMap) {
+   List<Integer> mapKeys = new ArrayList<Integer>(passedMap.keySet());
+   List<Double> mapValues = new ArrayList<Double>(passedMap.values());
+   Collections.sort(mapValues);
+   Collections.sort(mapKeys);
+
+   LinkedHashMap<Integer,Double> sortedMap = 
+       new LinkedHashMap<Integer,Double>();
+
+   Iterator valueIt = mapValues.iterator();
+   while (valueIt.hasNext()) {
+       Object val = valueIt.next();
+    Iterator keyIt = mapKeys.iterator();
+
+    while (keyIt.hasNext()) {
+        int key = (Integer)keyIt.next();
+        double comp1 = (Double)passedMap.get(key);
+        int comp2 = (Integer)val;
+
+        if (comp1 == comp2){
+            passedMap.remove(key);
+            mapKeys.remove(key);
+            sortedMap.put(key,(Double) val);
+            break;
+        }
+
+    }
+
+}
+return sortedMap;
+}
+
     public void print(){
         System.out.println("================");
         System.out.println("Sequence learner print");

@@ -14,84 +14,94 @@ package falcon;
  * @author WA0003EN
  */
 
+import com.google.code.geocoder.Geocoder;
+import com.google.code.geocoder.GeocoderRequestBuilder;
+import com.google.code.geocoder.model.GeocodeResponse;
+import com.google.code.geocoder.model.GeocoderRequest;
+import com.google.code.geocoder.model.GeocoderResult;
+import com.google.code.geocoder.model.GeocoderResultType;
+import com.google.code.geocoder.model.LatLng;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 public class MemoryEvent {
     
-   
+public static enum peopleList {
+	FAMILY, FRIENDS, COLLEAGUES, CLASSMATES, RELATIVES, NEIGHBOURS, ACQUAINTANCES;
+ 
+}
+public static enum moodList {
+	HAPPY, SAD, EXCITED;
+ 
+}
+public static enum activityList {
+	LUNCH, DINNER, TRAVEL,PICNIC,SHOPPING,NIGHTOUT,SPORTS,WORK,GATHERING,PARTY,WEDDING;
+}
+public static HashMap<Integer,String> symlinks;
+static {
+        symlinks.put(1, "images/photos/Memory1/");
+        symlinks.put(2, "images/photos/Memory2/");
+        symlinks.put(3, "images/photos/Memory3/");
+        symlinks.put(4, "images/photos/Memory4/");
+        symlinks.put(5, "images/photos/Memory5/");
+        symlinks.put(6, "images/photos/Memory6/");
+        symlinks.put(7, "images/photos/Memory7/");
+        symlinks.put(8, "images/photos/Memory8/");
+        symlinks.put(9, "images/photos/Memory9/");
+        symlinks.put(10, "images/photos/Memory10/");
+        symlinks.put(11, "images/photos/Memory11/");
+        symlinks.put(12, "images/photos/Memory12/");
+        symlinks.put(13, "images/photos/Memory13/");
+        symlinks.put(14, "images/photos/Memory14/");
+        symlinks.put(15, "images/photos/Memory15/");
+        symlinks.put(16, "images/photos/Memory16/");
+        symlinks.put(17, "images/photos/Memory17/");
+        symlinks.put(18, "images/photos/Memory18/");
+        symlinks.put(19, "images/photos/Memory19/");
+        symlinks.put(20, "images/photos/Memory20/");
+        symlinks.put(21, "images/photos/Memory21/");
+    }
+public static <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
+     Set<T> keys = new HashSet<T>();     
+     for (Entry<T, E> entry : map.entrySet()) {
+         if (value.equals(entry.getValue())) {
+             keys.add(entry.getKey());
+         }
+     }
+     return keys;
+}
    private double curLat;
    private double curLong;
    private Timestamp curTime;
-   private String[] people;
-   private int emotional_state;
-   private int activity;
-   private String story;
+   private String people;
+   private String mood;
+   private String activity;
+   private int imagery;
 
     
-    public MemoryEvent(double curLat, double curLong, Timestamp curTime, String[] people, int emotional_state, int activity) {
+    public MemoryEvent(double curLat, double curLong, Timestamp curTime, String people, String mood, String activity) {
         this.curLat = curLat;
         this.curLong = curLong;
         this.curTime = curTime;
         this.people = people;
-        this.emotional_state = emotional_state;
+        this.mood = mood;
         this.activity = activity;
     }
+
     /**
      * @return the curLat
      */
-    public MemoryEvent(double[][] ifield,int index) throws IOException  {
-                   //System.out.println(Arrays.deepToString(ifield));
-                    long timestamp=0;
-                    story="I was with ";
-                    for(int k=0;k<ifield.length;k++){
-                        for(int i=0;i<ifield[k].length;i++){
-                            
-                            if(k==1)
-                            {
-                            if (i<3)
-                            {
-                            int num = (int) (ifield[k][i]*100);
-                            if (num>0)
-                            story = story + allPeople[num-1];
-                            if (i==ifield[k].length-1)
-                            ;
-                            else story+=",";
-                            }
-                            else if (i==3)
-                            {
-                            double temp =  ifield[k][i]*1000000000;
-                            timestamp = (long) temp;
-                            }
-                            else if (i==4)
-                            {
-                                double temp =  ifield[k][i]*10;
-                                emotional_state = (int) temp;
-                            
-                            }
-                            else 
-                            {
-                            double temp = ifield[k][i]*10;
-                            activity = (int) temp;
-                            }
-                            }
-                            if (k==0)
-                            {
-                            if (i==0)
-                                curLat=1000*ifield[k][i];
-                            else
-                                curLong = 1000*ifield[k][i];   
-                            }
-                            
-                        }
-                    }
-                     Date date  = new Date(timestamp);
-                     long time = date.getTime();
-                     curTime = new Timestamp(time);
-                  
-    }
     public double getCurLat() {
         return curLat;
     }
@@ -120,6 +130,20 @@ public class MemoryEvent {
     /**
      * @return the curTime
      */
+    public String getLocationString(){
+    final Geocoder geocoder = new Geocoder();
+    GeocodeResponse geocoderResponse;
+    GeocoderRequest req = new GeocoderRequest();
+    
+    BigDecimal l1 = new BigDecimal(curLat, MathContext.DECIMAL64);
+    BigDecimal l2 = new BigDecimal(curLong, MathContext.DECIMAL64);
+    LatLng rev = new LatLng(l1,l2);
+    req.setLocation(rev);
+    geocoderResponse = geocoder.geocode(req);
+    final GeocoderResult geocoderResult = geocoderResponse.getResults().iterator().next();
+    String address = geocoderResult.getFormattedAddress();
+    return address;
+    }
     public Timestamp getCurTime() {
         return curTime;
     }
@@ -130,54 +154,60 @@ public class MemoryEvent {
     public void setCurTime(Timestamp curTime) {
         this.curTime = curTime;
     }
-
+    public String getFormattedTime(){
+    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");  
+    Date date; 
+    date = new Date(curTime.getTime());
+    String formattedDate= df.format(date);
+    return formattedDate;
+    }
     /**
      * @return the people
      */
-    public String[] getPeople() {
+    public String getPeople() {
         return people;
     }
 
     /**
      * @param people the people to set
      */
-    public void setPeople(String[] people) {
+    public void setPeople(String people) {
         this.people = people;
     }
 
     /**
      * @return the emotional_state
      */
-    public double getEmotional_state() {
-        return emotional_state;
+    public String getMood() {
+        return mood;
     }
 
     /**
      * @param emotional_state the emotional_state to set
      */
-    public void setEmotional_state(int emotional_state) {
-        this.emotional_state = emotional_state;
+    public void setMood(String mood) {
+        this.mood = mood;
     }
 
     /**
      * @return the activity
      */
-    public double getActivity() {
+    public String getActivity() {
         return activity;
     }
 
     /**
      * @param activity the activity to set
      */
-    public void setActivity(int activity) {
+    public void setActivity(String activity) {
         this.activity = activity;
     }
-    public void setStory(String story) {
-        this.story = story;
+    public void setImagery(int story) {
+        this.imagery = imagery;
     }
 
-    public String getStory() {
-        return story;
+    public int getImagery() {
+        return imagery;
     }
 
 }
